@@ -27,7 +27,7 @@
     margin: 0; min-height: 100%; background: var(--paper); color: var(--ink);
     font-family: 'Fraunces', Georgia, serif; -webkit-font-smoothing: antialiased;
   }
- 
+
   /* Bandeau compact — laisse le maximum de place à la carte */
   /* Bandeau — fixe, hauteur mesurée en JS */
   header.top {
@@ -53,7 +53,7 @@
   }
   header.top .clock svg { width: 13px; height: 13px; opacity: 0.7; }
   header.top .clock b { color: #EFE9D8; font-weight: 500; }
- 
+
   nav.tabs { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; }
   nav.tabs::-webkit-scrollbar { display: none; }
   nav.tabs button {
@@ -63,10 +63,10 @@
     padding: 6px 10px; cursor: pointer; border-bottom: 2px solid transparent;
   }
   nav.tabs button.active { color: #EFE9D8; border-bottom-color: var(--clay); }
- 
+
   .panel { display: none; }
   .panel.active { display: block; }
- 
+
   /* ===== CARTE — occupe tout l'espace sous le bandeau, hauteur fixée en JS ===== */
   #carte.panel {
     position: fixed;
@@ -75,10 +75,10 @@
   }
   #carte.panel.active { display: block; }
   .map-wrap, .map-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
- 
+
   /* ===== PORTFOLIO — flux normal, décalé sous le bandeau fixe ===== */
   #portfolio.panel { padding-top: var(--header-h, 56px); }
- 
+
   /* ===== PORTFOLIO ===== */
   .portfolio-frame { margin: 18px; border: 1px solid var(--line); background: var(--paper-deep); }
   .portfolio-embed { position: relative; padding-bottom: 62%; height: 0; overflow: hidden; }
@@ -93,10 +93,10 @@
     color: var(--clay); text-decoration: none; font-family: 'Fraunces', serif;
     font-weight: 500; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
   }
- 
+
   footer.contact { text-align: center; padding: 16px 20px 30px; font-style: italic; font-size: 0.82rem; color: var(--ink-soft); }
   footer.contact a { color: var(--clay); text-decoration: none; border-bottom: 1px solid var(--clay); }
- 
+
   /* ===== ESPECES — carnet de terrain ===== */
   #especes.panel { padding: calc(var(--header-h, 72px) + 24px) 18px 50px; max-width: 620px; margin: 0 auto; }
   .especes-intro { text-align: center; font-style: italic; font-size: 0.86rem; color: var(--ink-faint); margin: 0 0 24px; }
@@ -125,7 +125,7 @@
   .espece-name { font-style: italic; font-size: 0.84rem; color: var(--ink); }
   .espece-card:not(.found) .espece-name { color: var(--ink-faint); }
   .espece-check { font-size: 0.66rem; color: var(--clay); margin-top: 2px; letter-spacing: 0.05em; text-transform: uppercase; }
- 
+
   /* Effet calendrier de l'avent — retournement de carte au chargement */
   .espece-photo { perspective: 600px; }
   .espece-photo .flip-inner {
@@ -137,7 +137,7 @@
   .flip-face.front { background: var(--paper-deep); }
   .flip-face.back { transform: rotateY(180deg); overflow: hidden; }
   .flip-face.back img { width: 100%; height: 100%; object-fit: cover; }
- 
+
   /* ===== OBSERVATIONS — toutes les obs du projet, groupées par type ===== */
   #observations.panel { padding: calc(var(--header-h, 72px) + 24px) 18px 50px; max-width: 680px; margin: 0 auto; }
   .obs-group { margin-bottom: 34px; }
@@ -150,7 +150,7 @@
   .obs-photo { aspect-ratio: 1/1; border-radius: 6px; overflow: hidden; background: var(--paper-deep); margin-bottom: 5px; }
   .obs-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .obs-name { font-style: italic; font-size: 0.68rem; color: var(--ink-soft); line-height: 1.3; }
- 
+
   /* ===== FIELD FINDS — liste triée, liens directs vers iNaturalist ===== */
   #fieldfinds.panel { padding: calc(var(--header-h, 72px) + 24px) 18px 50px; max-width: 560px; margin: 0 auto; }
   .ff-profile-link { color: var(--clay); text-decoration: none; border-bottom: 1px solid var(--clay); font-style: normal; }
@@ -172,7 +172,7 @@
     flex: 0 0 auto; font-size: 0.68rem; letter-spacing: 0.05em; text-transform: uppercase;
     color: var(--clay); text-decoration: none; border-bottom: 1px solid var(--clay); white-space: nowrap;
   }
- 
+
   @media (prefers-color-scheme: dark) {
     body:not([data-theme="light"]) {
       --paper: #211D17; --paper-deep: #2A251D; --ink: #EDE7D8;
@@ -182,7 +182,7 @@
 </style>
 </head>
 <body>
- 
+
 <header class="top">
   <div class="brand">
     <div class="logo-slot">
@@ -194,7 +194,7 @@
   <div class="right">
     <div class="clock" id="barilocheClock">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="#C9C0A6" stroke-width="1.2"/><path d="M12 7v5l3 2" stroke="#C9C0A6" stroke-width="1.2" stroke-linecap="round"/></svg>
-      <span><b id="barilocheTime">--:--</b> à Bariloche</span>
+      <span>Nina's Time <b id="barilocheTime">--:--</b></span>
     </div>
     <nav class="tabs">
       <button class="active" data-target="carte">Map</button>
@@ -204,26 +204,26 @@
     </nav>
   </div>
 </header>
- 
+
 <section class="panel active" id="carte">
   <div class="map-wrap">
     <iframe src="https://ninarvana.travelmap.net" allow="fullscreen" title="Carte du voyage de Nina"></iframe>
   </div>
 </section>
- 
+
 <section class="panel" id="especes">
   <div class="hof-title">Hall of Fame<span>So pretty, my favorites</span></div>
   <div class="especes-grid" id="hofGrid"></div>
- 
+
   <div class="hof-title wanted-title">Wanted<span>Still missing</span></div>
   <div class="especes-grid" id="wantedGrid"></div>
 </section>
- 
+
 <section class="panel" id="fieldfinds">
   <div class="especes-intro">Chaque trouvaille, dans l'ordre — <a class="ff-profile-link" href="https://www.inaturalist.org/people/ninarvana" target="_blank" rel="noopener">voir tout mon profil iNaturalist ↗</a></div>
   <div id="fieldFindsList"></div>
 </section>
- 
+
 <section class="panel" id="portfolio">
   <div class="portfolio-frame">
     <div class="portfolio-embed">
@@ -235,20 +235,20 @@
     <a class="open-btn" href="https://lightroom.adobe.com/shares/e3430cac3a744459892c4b79e24c6f7e" target="_blank" rel="noopener">Voir toutes les photos</a>
   </div>
 </section>
- 
+
 <footer class="contact">
   Stay in touch with <a href="https://wa.me/33000000000" target="_blank" rel="noopener">WhatsApp</a> :)
 </footer>
- 
+
 <script>
   // ============================================================
   // CONFIG — colle ici le lien "Publier sur le web" de l'onglet Espèces
   // ============================================================
   const ESPECES_CSV_URL = "COLLE_ICI_LE_LIEN_CSV_DE_L_ONGLET_ESPECES";
   const INATURALIST_USERNAME = "ninarvana";
- 
+
   const GENERIC_SILHOUETTE = '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 42V22" stroke="currentColor" stroke-width="1.5"/><path d="M24 22C24 22 12 20 12 10C12 10 24 10 24 22Z" stroke="currentColor" stroke-width="1.5"/><path d="M24 22C24 22 36 20 36 10C36 10 24 10 24 22Z" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/></svg>';
- 
+
   function driveIdToImg(url){
     const m = (url || '').match(/[-\w]{25,}/);
     return m ? 'https://drive.google.com/uc?export=view&id=' + m[0] : null;
@@ -256,24 +256,24 @@
   function normalizeName(str){
     return (str || '').trim().toLowerCase().replace(/\s+/g, ' ');
   }
- 
+
   function renderEspeces(rows, inatMap){
     const hofGrid = document.getElementById('hofGrid');
     const wantedGrid = document.getElementById('wantedGrid');
     hofGrid.innerHTML = '';
     wantedGrid.innerHTML = '';
     const foundCards = [];
- 
+
     rows.forEach(function(row){
       const name = (row['Espèce'] || row['Espece'] || '').trim();
       if (!name) return;
       const manualPhoto = driveIdToImg(row['Photo']);
       const inatPhoto = inatMap[normalizeName(name)] || null;
       const photoUrl = manualPhoto || inatPhoto;
- 
+
       const card = document.createElement('div');
       card.className = 'espece-card';
- 
+
       if (photoUrl){
         card.innerHTML =
           '<div class="espece-photo"><div class="flip-inner">' +
@@ -292,17 +292,17 @@
         wantedGrid.appendChild(card);
       }
     });
- 
+
     // révélation en cascade, dispersée comme un calendrier de l'avent
     foundCards.forEach(function(card, i){
       setTimeout(function(){ card.classList.add('found'); }, 150 + Math.random() * i * 120);
     });
- 
+
     if (hofGrid.children.length === 0){
       hofGrid.innerHTML = '<p style="grid-column:1/-1; text-align:center; font-style:italic; color:var(--ink-faint);">Pas encore de trouvaille à célébrer.</p>';
     }
   }
- 
+
   function fetchInatObservations(){
     if (!INATURALIST_USERNAME) return Promise.resolve({});
     const url = 'https://api.inaturalist.org/v1/observations?user_login=' + encodeURIComponent(INATURALIST_USERNAME) + '&per_page=200&order_by=observed_on&order=desc';
@@ -325,12 +325,12 @@
         return {};
       });
   }
- 
+
   function loadEspeces(){
     const hofGrid = document.getElementById('hofGrid');
     const wantedGrid = document.getElementById('wantedGrid');
     const inatPromise = fetchInatObservations();
- 
+
     if (ESPECES_CSV_URL.indexOf('COLLE_ICI') === -1){
       const sheetPromise = fetch(ESPECES_CSV_URL)
         .then(r => r.text())
@@ -353,12 +353,12 @@
     }
   }
   loadEspeces();
- 
+
   // ============================================================
   // Onglet Observations — tout le Project, groupé par type
   // ============================================================
-  const INATURALIST_PROJECT = "COLLE_ICI_LE_SLUG_OU_ID_DU_PROJECT"; // ex: "following-the-violacrumbs"
- 
+  const INATURALIST_PROJECT = "violacrumbs";
+
   const ICONIC_LABELS = {
     'Aves': 'Oiseaux',
     'Plantae': 'Plantes',
@@ -376,7 +376,7 @@
     'Unknown': 'Non identifié'
   };
   const ICONIC_ORDER = ['Plantae','Aves','Mammalia','Reptilia','Amphibia','Insecta','Arachnida','Mollusca','Fungi','Actinopterygii','Animalia','Chromista','Protozoa','Unknown'];
- 
+
   function loadFieldFinds(){
     const ffList = document.getElementById('fieldFindsList');
     if (INATURALIST_PROJECT.indexOf('COLLE_ICI') !== -1){
@@ -416,7 +416,7 @@
       });
   }
   loadFieldFinds();
- 
+
   document.querySelectorAll('nav.tabs button').forEach(function(btn){
     btn.addEventListener('click', function(){
       document.querySelectorAll('nav.tabs button').forEach(b => b.classList.remove('active'));
@@ -425,7 +425,7 @@
       document.getElementById(btn.dataset.target).classList.add('active');
     });
   });
- 
+
   function updateBarilocheClock(){
     const el = document.getElementById('barilocheTime');
     if (!el) return;
@@ -437,7 +437,7 @@
   }
   updateBarilocheClock();
   setInterval(updateBarilocheClock, 30000);
- 
+
   function setHeaderHeight(){
     const h = document.querySelector('header.top').offsetHeight;
     document.documentElement.style.setProperty('--header-h', h + 'px');
@@ -446,6 +446,6 @@
   window.addEventListener('resize', setHeaderHeight);
   window.addEventListener('orientationchange', setHeaderHeight);
 </script>
- 
+
 </body>
 </html>
