@@ -28,8 +28,9 @@
   }
 
   /* Bandeau compact — laisse le maximum de place à la carte */
+  /* Bandeau compact — fixe, hauteur mesurée en JS */
   header.top {
-    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30;
+    position: fixed; top: env(safe-area-inset-top, 0px); left: 0; right: 0; z-index: 40;
     display: flex; align-items: center; justify-content: space-between;
     padding: 10px 16px; background: #46493A; color: #EFE9D8;
     border-bottom: 1px solid rgba(255,255,255,0.08);
@@ -49,10 +50,17 @@
   .panel { display: none; }
   .panel.active { display: block; }
 
-  /* ===== CARTE — plein écran ===== */
-  #carte.panel.active { display: flex; flex-direction: column; }
-  .map-wrap { flex: 1; width: 100%; min-height: calc(100vh - 52px); }
-  .map-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
+  /* ===== CARTE — occupe tout l'espace sous le bandeau, hauteur fixée en JS ===== */
+  #carte.panel {
+    position: fixed;
+    top: var(--header-h, 56px);
+    left: 0; right: 0; bottom: 0;
+  }
+  #carte.panel.active { display: block; }
+  .map-wrap, .map-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
+
+  /* ===== PORTFOLIO — flux normal, décalé sous le bandeau fixe ===== */
+  #portfolio.panel { padding-top: var(--header-h, 56px); }
 
   /* ===== PORTFOLIO ===== */
   .portfolio-frame { margin: 18px; border: 1px solid var(--line); background: var(--paper-deep); }
@@ -121,6 +129,14 @@
       document.getElementById(btn.dataset.target).classList.add('active');
     });
   });
+
+  function setHeaderHeight(){
+    const h = document.querySelector('header.top').offsetHeight;
+    document.documentElement.style.setProperty('--header-h', h + 'px');
+  }
+  setHeaderHeight();
+  window.addEventListener('resize', setHeaderHeight);
+  window.addEventListener('orientationchange', setHeaderHeight);
 </script>
 
 </body>
