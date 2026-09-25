@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Station Nina — voyage Amérique du Sud</title>
+<title>Following the Violacrumbs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,380;0,9..144,500;0,9..144,600;1,9..144,420&display=swap" rel="stylesheet">
@@ -28,15 +28,30 @@
   }
 
   /* Bandeau compact — laisse le maximum de place à la carte */
-  /* Bandeau compact — fixe, hauteur mesurée en JS */
+  /* Bandeau — fixe, hauteur mesurée en JS */
   header.top {
     position: fixed; top: env(safe-area-inset-top, 0px); left: 0; right: 0; z-index: 40;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 16px; background: #46493A; color: #EFE9D8;
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    flex-wrap: wrap;
+    padding: 14px 16px; background: #46493A; color: #EFE9D8;
     border-bottom: 1px solid rgba(255,255,255,0.08);
   }
-  header.top .title { font-weight: 600; font-size: 0.86rem; letter-spacing: 0.1em; text-transform: uppercase; }
-  header.top .title span { display: block; font-weight: 380; font-style: italic; font-size: 0.68rem; letter-spacing: 0; color: #C9C0A6; text-transform: none; margin-top: 1px; }
+  header.top .brand { display: flex; align-items: center; gap: 12px; }
+  header.top .logo-slot {
+    width: 42px; height: 42px; border-radius: 50%;
+    border: 1px dashed rgba(255,255,255,0.35);
+    flex: 0 0 auto; display: flex; align-items: center; justify-content: center;
+  }
+  header.top .logo-slot svg { width: 22px; height: 22px; opacity: 0.55; }
+  header.top .title { font-weight: 600; font-size: 0.92rem; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.3; }
+  header.top .title span { display: block; font-weight: 380; font-style: italic; font-size: 0.68rem; letter-spacing: 0; color: #C9C0A6; text-transform: none; margin-top: 2px; }
+  header.top .right { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+  header.top .clock {
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'Fraunces', serif; font-size: 0.7rem; color: #C9C0A6;
+  }
+  header.top .clock svg { width: 13px; height: 13px; opacity: 0.7; }
+  header.top .clock b { color: #EFE9D8; font-weight: 500; }
 
   nav.tabs { display: flex; }
   nav.tabs button {
@@ -53,7 +68,7 @@
   /* ===== CARTE — occupe tout l'espace sous le bandeau, hauteur fixée en JS ===== */
   #carte.panel {
     position: fixed;
-    top: var(--header-h, 56px);
+    top: var(--header-h, 72px);
     left: 0; right: 0; bottom: 0;
   }
   #carte.panel.active { display: block; }
@@ -91,11 +106,23 @@
 <body>
 
 <header class="top">
-  <div class="title">Station Nina<span>Chili · Argentine · Panama</span></div>
-  <nav class="tabs">
-    <button class="active" data-target="carte">Carte</button>
-    <button data-target="portfolio">Portfolio</button>
-  </nav>
+  <div class="brand">
+    <div class="logo-slot">
+      <!-- Remplacer par <img src="..." alt=""> une fois le dessin synthétisé prêt -->
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4" stroke="#EFE9D8" stroke-width="1"/></svg>
+    </div>
+    <div class="title">Following the Violacrumbs<span>Chili · Argentine</span></div>
+  </div>
+  <div class="right">
+    <div class="clock" id="barilocheClock">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="#C9C0A6" stroke-width="1.2"/><path d="M12 7v5l3 2" stroke="#C9C0A6" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <span><b id="barilocheTime">--:--</b> à Bariloche</span>
+    </div>
+    <nav class="tabs">
+      <button class="active" data-target="carte">Map</button>
+      <button data-target="portfolio">Portfolio</button>
+    </nav>
+  </div>
 </header>
 
 <section class="panel active" id="carte">
@@ -117,7 +144,7 @@
 </section>
 
 <footer class="contact">
-  Pour me joindre directement, <a href="https://wa.me/33000000000" target="_blank" rel="noopener">WhatsApp reste le plus sûr</a>.
+  Stay in touch with <a href="https://wa.me/33000000000" target="_blank" rel="noopener">WhatsApp</a> :)
 </footer>
 
 <script>
@@ -129,6 +156,18 @@
       document.getElementById(btn.dataset.target).classList.add('active');
     });
   });
+
+  function updateBarilocheClock(){
+    const el = document.getElementById('barilocheTime');
+    if (!el) return;
+    const formatter = new Intl.DateTimeFormat('fr-FR', {
+      hour: '2-digit', minute: '2-digit',
+      timeZone: 'America/Argentina/Bariloche'
+    });
+    el.textContent = formatter.format(new Date());
+  }
+  updateBarilocheClock();
+  setInterval(updateBarilocheClock, 30000);
 
   function setHeaderHeight(){
     const h = document.querySelector('header.top').offsetHeight;
