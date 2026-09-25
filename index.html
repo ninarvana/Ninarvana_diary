@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,380;0,9..144,500;0,9..144,600;1,9..144,420&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <style>
   :root {
     box-sizing: border-box;
@@ -24,37 +25,24 @@
   html { scroll-padding-top: 60px; height: 100%; }
   *, *::before, *::after { box-sizing: inherit; }
   body {
-    margin: 0;
-    min-height: 100%;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'Fraunces', Georgia, serif;
-    -webkit-font-smoothing: antialiased;
+    margin: 0; min-height: 100%; background: var(--paper); color: var(--ink);
+    font-family: 'Fraunces', Georgia, serif; -webkit-font-smoothing: antialiased;
   }
 
-  /* ===== HERO ===== */
   .hero {
-    position: relative;
-    padding: 34px 24px 26px;
+    position: relative; padding: 34px 24px 26px;
     background:
       radial-gradient(120% 90% at 15% 0%, rgba(161,92,60,0.16), transparent 55%),
       linear-gradient(180deg, #46493A 0%, #5C5E42 42%, #74765A 100%);
-    color: #EFE9D8;
-    overflow: hidden;
+    color: #EFE9D8; overflow: hidden;
   }
   .hero-inner { position: relative; text-align: center; }
   .hero .mark { width: 30px; height: 30px; margin: 0 auto 14px; }
-  .hero h1 {
-    margin: 0;
-    font-weight: 600;
-    font-size: 1.5rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
+  .hero h1 { margin: 0; font-weight: 600; font-size: 1.5rem; letter-spacing: 0.14em; text-transform: uppercase; }
   .hero .place { margin: 8px 0 0; font-style: italic; font-weight: 380; font-size: 1rem; color: #E4DCC0; }
   .hero .dates { margin: 4px 0 0; font-size: 0.78rem; color: #C9C0A6; letter-spacing: 0.02em; }
+  .hero .status { margin: 14px 0 0; font-size: 0.74rem; color: #D8D0B8; font-style: italic; }
 
-  /* ===== TABS ===== */
   nav.tabs {
     position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30;
     display: flex; background: var(--paper); border-bottom: 1px solid var(--line);
@@ -70,7 +58,6 @@
   .panel { display: none; }
   .panel.active { display: block; }
 
-  /* ===== CARTE (TravelMap) ===== */
   .map-frame { margin: 18px; border: 1px solid var(--line); background: var(--paper-deep); }
   .map-wrap { width: 100%; height: calc(100vh - 300px); min-height: 380px; }
   .map-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
@@ -79,71 +66,37 @@
     color: var(--ink-soft); text-align: center; border-top: 1px solid var(--line);
   }
 
-  /* ===== RECIT ===== */
-  .recit { padding: 0 0 60px; max-width: 600px; margin: 0 auto; }
-
-  .route-map {
-    padding: 20px 20px 8px;
+  /* ===== RECIT — textes longs, occasionnels ===== */
+  .recit { padding: 30px 22px 60px; max-width: 600px; margin: 0 auto; }
+  .recit-intro {
+    text-align: center; font-style: italic; font-size: 0.86rem;
+    color: var(--ink-faint); margin: 0 0 32px; padding-bottom: 26px;
     border-bottom: 1px solid var(--line);
-    margin-bottom: 6px;
   }
-  .route-map svg { width: 100%; height: auto; display: block; }
-  .route-map .point circle {
-    fill: var(--paper);
-    stroke: var(--clay);
-    stroke-width: 1.4;
-    cursor: pointer;
-    transition: r 0.15s ease, fill 0.15s ease;
-  }
-  .route-map .point.active circle { fill: var(--clay); }
-  .route-map .point text {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-size: 7px;
-    fill: var(--ink-soft);
-    pointer-events: none;
-  }
-  .route-map .path {
-    fill: none;
-    stroke: var(--ink-faint);
-    stroke-width: 0.8;
-    stroke-dasharray: 2.5 2.5;
-  }
-  .route-map .caption {
-    text-align: center; font-style: italic; font-size: 0.76rem;
-    color: var(--ink-faint); margin: 8px 0 0;
-  }
-
-  .entries { padding: 6px 22px 0; }
-  .entry {
-    padding: 26px 0 30px;
-    border-bottom: 1px solid var(--line);
-    scroll-margin-top: 70px;
-    transition: background 0.4s ease;
-  }
-  .entry:last-child { border-bottom: none; }
-  .entry .place {
-    font-weight: 600; font-size: 1.15rem; letter-spacing: 0.04em;
-    text-transform: uppercase; margin: 0 0 4px;
-  }
-  .entry .meta { font-style: italic; font-size: 0.82rem; color: var(--ink-faint); margin: 0 0 16px; }
-  .entry .text { font-size: 1.02rem; line-height: 1.75; color: var(--ink); margin: 0 0 16px; max-width: 34em; }
-  .entry .voice { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
-  .entry .voice .play {
-    width: 22px; height: 22px; border-radius: 50%; border: 1.3px solid var(--clay);
-    flex: 0 0 auto; display: flex; align-items: center; justify-content: center;
-  }
-  .entry .voice .play::after {
-    content: ""; border-style: solid; border-width: 4px 0 4px 6px;
-    border-color: transparent transparent transparent var(--clay); margin-left: 1px;
-  }
-  .entry .voice .label { font-style: italic; font-size: 0.85rem; color: var(--ink-soft); }
+  .entry { padding: 0 0 40px; margin-bottom: 40px; border-bottom: 1px solid var(--line); }
+  .entry:last-child { border-bottom: none; margin-bottom: 0; }
+  .entry .place { font-weight: 600; font-size: 1.3rem; letter-spacing: 0.03em; text-transform: uppercase; margin: 0 0 4px; }
+  .entry .meta { font-style: italic; font-size: 0.84rem; color: var(--ink-faint); margin: 0 0 20px; }
+  .entry .text { font-size: 1.05rem; line-height: 1.85; color: var(--ink); margin: 0 0 18px; max-width: 36em; }
+  .entry .text::first-letter { font-size: 1.7em; font-weight: 600; }
+  .entry .voice { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .entry .voice audio { height: 32px; max-width: 240px; }
   .strip { display: flex; gap: 4px; overflow-x: auto; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
   .strip::-webkit-scrollbar { display: none; }
-  .ph { flex: 0 0 auto; width: 130px; height: 164px; scroll-snap-align: start; background: linear-gradient(155deg, #8C7A57, #4E4B34); }
-  .recit-note { text-align: center; font-style: italic; font-size: 0.78rem; color: var(--ink-faint); padding: 20px 20px 0; }
+  .strip img, .strip .ph {
+    flex: 0 0 auto; width: 150px; height: 190px; scroll-snap-align: start;
+    object-fit: cover; background: linear-gradient(155deg, #8C7A57, #4E4B34);
+  }
+  .strip img { cursor: pointer; }
+  .recit-empty { text-align: center; font-style: italic; font-size: 0.9rem; color: var(--ink-faint); padding: 60px 30px; }
 
-  /* ===== PORTFOLIO ===== */
+  .portfolio-frame { margin: 18px; border: 1px solid var(--line); background: var(--paper-deep); }
+  .portfolio-embed { position: relative; padding-bottom: 62%; height: 0; overflow: hidden; }
+  .portfolio-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+  .portfolio-caption {
+    padding: 12px 16px 14px; font-style: italic; font-size: 0.82rem;
+    color: var(--ink-soft); text-align: center; border-top: 1px solid var(--line);
+  }
   .portfolio { padding: 70px 24px; max-width: 460px; margin: 0 auto; text-align: center; }
   .portfolio svg.icon { width: 46px; height: 46px; margin: 0 auto 20px; display: block; color: var(--clay); }
   .portfolio h2 { font-weight: 600; font-size: 1.05rem; letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 10px; }
@@ -151,6 +104,13 @@
 
   footer.contact { text-align: center; padding: 20px 20px 34px; font-style: italic; font-size: 0.84rem; color: var(--ink-soft); }
   footer.contact a { color: var(--clay); text-decoration: none; border-bottom: 1px solid var(--clay); }
+
+  .lightbox {
+    display: none; position: fixed; inset: 0; z-index: 100;
+    background: rgba(20,17,12,0.92); align-items: center; justify-content: center; padding: 20px;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 100%; max-height: 100%; }
 
   @media (prefers-color-scheme: dark) {
     body:not([data-theme="light"]) {
@@ -172,6 +132,7 @@
     <h1>Station Nina</h1>
     <p class="place">Chili · Argentine · Panama</p>
     <p class="dates">décembre — avril</p>
+    <p class="status" id="statusLine">chargement…</p>
   </div>
 </div>
 
@@ -181,7 +142,6 @@
   <button data-target="portfolio">Portfolio</button>
 </nav>
 
-<!-- CARTE -->
 <section class="panel active" id="carte">
   <div class="map-frame">
     <div class="map-wrap">
@@ -191,28 +151,19 @@
   </div>
 </section>
 
-<!-- RECIT -->
 <section class="panel" id="recit">
   <div class="recit">
-    <div class="route-map">
-      <svg id="routeSvg" viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg"></svg>
-      <p class="caption">Touche un point pour rejoindre l'entrée</p>
-    </div>
-    <div class="entries" id="entriesList"></div>
-    <p class="recit-note">Exemples d'entrées, en attente de connexion au vrai journal.</p>
+    <p class="recit-intro">Pour la carte et le fil du quotidien, direction l'onglet Carte. Ici, les textes plus longs — quand il y a quelque chose à vraiment raconter.</p>
+    <div id="entriesList"></div>
   </div>
 </section>
 
-<!-- PORTFOLIO -->
 <section class="panel" id="portfolio">
-  <div class="portfolio">
-    <svg class="icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="6" y="10" width="36" height="28" stroke="currentColor" stroke-width="1"/>
-      <circle cx="16" cy="19" r="3" stroke="currentColor" stroke-width="1"/>
-      <path d="M6 32 L18 22 L27 29 L34 23 L42 30" stroke="currentColor" stroke-width="1"/>
-    </svg>
-    <h2>Portfolio en préparation</h2>
-    <p>Cet onglet accueillera l'album Lightroom partagé du voyage, mis à jour automatiquement depuis le terrain.</p>
+  <div class="portfolio-frame">
+    <div class="portfolio-embed">
+      <iframe src="https://lightroom.adobe.com/embed/shares/e3430cac3a744459892c4b79e24c6f7e/slideshow?background_color=%23EEE8DA&color=%236E6552" title="Album photo de Nina"></iframe>
+    </div>
+    <p class="portfolio-caption">Album Lightroom — mis à jour automatiquement depuis le terrain</p>
   </div>
 </section>
 
@@ -220,8 +171,11 @@
   Pour me joindre directement, <a href="https://wa.me/33000000000" target="_blank" rel="noopener">WhatsApp reste le plus sûr</a>.
 </footer>
 
+<div class="lightbox" id="lightbox"><img id="lightboxImg" src="" alt=""></div>
+
 <script>
-  // ===== Tab switching =====
+  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTqZ_oVx9ZyDEBJpiLQG4lD2dg9pUIAku7i9g3MI-XKrsKDNnfgMzHGl7d2l4ygJC5G9_5Kus2oBfgm/pub?output=csv";
+
   document.querySelectorAll('nav.tabs button').forEach(function(btn){
     btn.addEventListener('click', function(){
       document.querySelectorAll('nav.tabs button').forEach(b => b.classList.remove('active'));
@@ -231,114 +185,86 @@
     });
   });
 
-  // ===== Data (à remplacer plus tard par les lignes du Sheet) =====
-  const entries = [
-    {
-      id: 'curacautin',
-      place: 'Vers Curacautín',
-      meta: '21 décembre, en route',
-      text: "Départ tôt, route sinueuse le long du volcan. Petit arrêt photo improvisé.",
-      voice: null,
-      photos: 2,
-      lat: -38.45, lon: -71.8833
-    },
-    {
-      id: 'conguillio',
-      place: 'Conguillío, Chili',
-      meta: '23 décembre, en fin de journée',
-      text: "Il a neigé toute la journée, puis le ciel s'est dégagé. J'ai trouvé deux Viola sur la moraine.",
-      voice: '47 secondes',
-      photos: 4,
-      lat: -38.6667, lon: -71.75
-    }
-  ];
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
+  function openLightbox(src){ lightboxImg.src = src; lightbox.classList.add('open'); }
 
-  // ===== Build entries list =====
-  const list = document.getElementById('entriesList');
-  entries.forEach(function(e){
-    const div = document.createElement('div');
-    div.className = 'entry';
-    div.id = 'entry-' + e.id;
-    div.dataset.id = e.id;
-    let voiceHtml = '';
-    if (e.voice) {
-      voiceHtml = '<div class="voice"><div class="play"></div><span class="label">note vocale, ' + e.voice + '</span></div>';
-    }
-    let photosHtml = '<div class="strip">';
-    for (let i = 0; i < e.photos; i++) photosHtml += '<div class="ph"></div>';
-    photosHtml += '</div>';
-    div.innerHTML =
-      '<p class="place">' + e.place + '</p>' +
-      '<p class="meta">' + e.meta + '</p>' +
-      '<p class="text">' + e.text + '</p>' +
-      voiceHtml + photosHtml;
-    list.appendChild(div);
-  });
-
-  // ===== Build the route map (SVG, projected from lat/lon) =====
-  const W = 300, H = 160, PAD = 26;
-  const lats = entries.map(e => e.lat), lons = entries.map(e => e.lon);
-  let minLat = Math.min(...lats), maxLat = Math.max(...lats);
-  let minLon = Math.min(...lons), maxLon = Math.max(...lons);
-  if (maxLat - minLat < 0.01) { maxLat += 0.05; minLat -= 0.05; }
-  if (maxLon - minLon < 0.01) { maxLon += 0.05; minLon -= 0.05; }
-
-  function project(lat, lon){
-    const x = PAD + (lon - minLon) / (maxLon - minLon) * (W - 2*PAD);
-    const y = PAD + (maxLat - lat) / (maxLat - minLat) * (H - 2*PAD);
-    return [x, y];
+  function driveFileIdToImageUrl(url){
+    const m = url.match(/[-\w]{25,}/);
+    return m ? 'https://drive.google.com/uc?export=view&id=' + m[0] : null;
+  }
+  function parseFrenchDate(str){
+    const m = str.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+    if (!m) return new Date(0);
+    return new Date(+m[3], +m[2]-1, +m[1]);
   }
 
-  const svg = document.getElementById('routeSvg');
-  const pts = entries.map(e => project(e.lat, e.lon));
+  const statusLine = document.getElementById('statusLine');
+  const list = document.getElementById('entriesList');
 
-  let pathD = 'M ' + pts.map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' L ');
-  const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  pathEl.setAttribute('d', pathD);
-  pathEl.setAttribute('class', 'path');
-  svg.appendChild(pathEl);
+  fetch(SHEET_CSV_URL)
+    .then(r => r.text())
+    .then(function(csvText){
+      const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
+      const rows = parsed.data.map(function(row){
+        const clean = {};
+        Object.keys(row).forEach(k => clean[k.trim()] = row[k]);
+        return clean;
+      });
 
-  entries.forEach(function(e, i){
-    const [x, y] = pts[i];
-    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    g.setAttribute('class', 'point');
-    g.setAttribute('data-id', e.id);
+      const entries = rows.map(function(row){
+        const photoUrls = (row['Photo'] || '')
+          .split(',').map(s => s.trim()).filter(Boolean)
+          .map(driveFileIdToImageUrl).filter(Boolean);
+        const voiceUrl = row['Vocal'] ? driveFileIdToImageUrl(row['Vocal']) : null;
+        return {
+          place: row['Where'] || 'Lieu inconnu',
+          dateRaw: row['Date'] || '',
+          dateObj: parseFrenchDate(row['Date'] || ''),
+          text: row['Text'] || '',
+          photos: photoUrls,
+          voiceUrl: voiceUrl
+        };
+      }).filter(e => e.text); // récit = uniquement les entrées avec un vrai texte
 
-    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('cx', x);
-    circle.setAttribute('cy', y);
-    circle.setAttribute('r', 4);
-    g.appendChild(circle);
-
-    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    label.setAttribute('x', x);
-    label.setAttribute('y', y - 8);
-    label.setAttribute('text-anchor', 'middle');
-    label.textContent = e.place.split(',')[0];
-    g.appendChild(label);
-
-    g.addEventListener('click', function(){
-      document.getElementById('entry-' + e.id).scrollIntoView({behavior: 'smooth', block: 'start'});
-    });
-
-    svg.appendChild(g);
-  });
-
-  // ===== Sync: highlight the point whose entry is in view =====
-  const points = svg.querySelectorAll('.point');
-  const observer = new IntersectionObserver(function(items){
-    items.forEach(function(item){
-      const id = item.target.dataset.id;
-      const point = svg.querySelector('.point[data-id="' + id + '"]');
-      if (!point) return;
-      if (item.isIntersecting) {
-        points.forEach(p => p.classList.remove('active'));
-        point.classList.add('active');
+      if (entries.length === 0){
+        list.innerHTML = '<p class="recit-empty">Rien de long à lire pour l\'instant — les premiers textes apparaîtront ici.</p>';
+        statusLine.textContent = 'en attente de la première entrée';
+        return;
       }
-    });
-  }, { rootMargin: '-40% 0px -50% 0px' });
 
-  document.querySelectorAll('.entry').forEach(el => observer.observe(el));
+      const newestFirst = [...entries].sort((a,b) => b.dateObj - a.dateObj);
+      statusLine.textContent = newestFirst[0].place + ' · dernier signal le ' + newestFirst[0].dateRaw;
+
+      newestFirst.forEach(function(e){
+        const div = document.createElement('div');
+        div.className = 'entry';
+
+        let voiceHtml = '';
+        if (e.voiceUrl){
+          voiceHtml = '<div class="voice"><audio controls src="' + e.voiceUrl + '"></audio></div>';
+        }
+        let photosHtml = '';
+        if (e.photos.length){
+          photosHtml = '<div class="strip">' +
+            e.photos.map(u => '<img src="' + u + '" loading="lazy" onclick="openLightbox(\'' + u + '\')">').join('') +
+            '</div>';
+        }
+
+        div.innerHTML =
+          '<p class="place">' + e.place + '</p>' +
+          '<p class="meta">' + e.dateRaw + '</p>' +
+          '<p class="text">' + e.text + '</p>' +
+          voiceHtml + photosHtml;
+        list.appendChild(div);
+      });
+    })
+    .catch(function(err){
+      console.error(err);
+      statusLine.textContent = 'connexion au journal indisponible';
+      list.innerHTML = '<p class="recit-empty">Impossible de charger le journal pour l\'instant.</p>';
+    });
 </script>
 
 </body>
