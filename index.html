@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,380;0,9..144,500;0,9..144,600;1,9..144,420&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <style>
   :root {
     box-sizing: border-box;
@@ -18,78 +17,44 @@
     --ink: #2C2620;
     --ink-soft: #6E6552;
     --ink-faint: #9A9080;
-    --olive: #5C5E42;
     --clay: #A15C3C;
     --line: #D2C7AE;
   }
-  html { scroll-padding-top: 60px; height: 100%; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); height: 100%; }
   *, *::before, *::after { box-sizing: inherit; }
   body {
     margin: 0; min-height: 100%; background: var(--paper); color: var(--ink);
     font-family: 'Fraunces', Georgia, serif; -webkit-font-smoothing: antialiased;
   }
 
-  .hero {
-    position: relative; padding: 34px 24px 26px;
-    background:
-      radial-gradient(120% 90% at 15% 0%, rgba(161,92,60,0.16), transparent 55%),
-      linear-gradient(180deg, #46493A 0%, #5C5E42 42%, #74765A 100%);
-    color: #EFE9D8; overflow: hidden;
-  }
-  .hero-inner { position: relative; text-align: center; }
-  .hero .mark { width: 30px; height: 30px; margin: 0 auto 14px; }
-  .hero h1 { margin: 0; font-weight: 600; font-size: 1.5rem; letter-spacing: 0.14em; text-transform: uppercase; }
-  .hero .place { margin: 8px 0 0; font-style: italic; font-weight: 380; font-size: 1rem; color: #E4DCC0; }
-  .hero .dates { margin: 4px 0 0; font-size: 0.78rem; color: #C9C0A6; letter-spacing: 0.02em; }
-  .hero .status { margin: 14px 0 0; font-size: 0.74rem; color: #D8D0B8; font-style: italic; }
-
-  nav.tabs {
+  /* Bandeau compact — laisse le maximum de place à la carte */
+  header.top {
     position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30;
-    display: flex; background: var(--paper); border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px; background: #46493A; color: #EFE9D8;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
   }
+  header.top .title { font-weight: 600; font-size: 0.86rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  header.top .title span { display: block; font-weight: 380; font-style: italic; font-size: 0.68rem; letter-spacing: 0; color: #C9C0A6; text-transform: none; margin-top: 1px; }
+
+  nav.tabs { display: flex; }
   nav.tabs button {
-    flex: 1; background: none; border: none;
-    font-family: 'Fraunces', serif; font-weight: 500; font-size: 0.72rem;
-    letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint);
-    padding: 14px 4px; cursor: pointer; border-bottom: 2px solid transparent;
+    background: none; border: none;
+    font-family: 'Fraunces', serif; font-weight: 500; font-size: 0.68rem;
+    letter-spacing: 0.08em; text-transform: uppercase; color: #C9C0A6;
+    padding: 6px 10px; cursor: pointer; border-bottom: 2px solid transparent;
   }
-  nav.tabs button.active { color: var(--ink); border-bottom-color: var(--clay); }
+  nav.tabs button.active { color: #EFE9D8; border-bottom-color: var(--clay); }
 
   .panel { display: none; }
   .panel.active { display: block; }
 
-  .map-frame { margin: 18px; border: 1px solid var(--line); background: var(--paper-deep); }
-  .map-wrap { width: 100%; height: calc(100vh - 300px); min-height: 380px; }
+  /* ===== CARTE — plein écran ===== */
+  #carte.panel.active { display: flex; flex-direction: column; }
+  .map-wrap { flex: 1; width: 100%; min-height: calc(100vh - 52px); }
   .map-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
-  .map-caption {
-    padding: 12px 16px 14px; font-style: italic; font-size: 0.82rem;
-    color: var(--ink-soft); text-align: center; border-top: 1px solid var(--line);
-  }
 
-  /* ===== RECIT — textes longs, occasionnels ===== */
-  .recit { padding: 30px 22px 60px; max-width: 600px; margin: 0 auto; }
-  .recit-intro {
-    text-align: center; font-style: italic; font-size: 0.86rem;
-    color: var(--ink-faint); margin: 0 0 32px; padding-bottom: 26px;
-    border-bottom: 1px solid var(--line);
-  }
-  .entry { padding: 0 0 40px; margin-bottom: 40px; border-bottom: 1px solid var(--line); }
-  .entry:last-child { border-bottom: none; margin-bottom: 0; }
-  .entry .place { font-weight: 600; font-size: 1.3rem; letter-spacing: 0.03em; text-transform: uppercase; margin: 0 0 4px; }
-  .entry .meta { font-style: italic; font-size: 0.84rem; color: var(--ink-faint); margin: 0 0 20px; }
-  .entry .text { font-size: 1.05rem; line-height: 1.85; color: var(--ink); margin: 0 0 18px; max-width: 36em; }
-  .entry .text::first-letter { font-size: 1.7em; font-weight: 600; }
-  .entry .voice { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
-  .entry .voice audio { height: 32px; max-width: 240px; }
-  .strip { display: flex; gap: 4px; overflow-x: auto; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
-  .strip::-webkit-scrollbar { display: none; }
-  .strip img, .strip .ph {
-    flex: 0 0 auto; width: 150px; height: 190px; scroll-snap-align: start;
-    object-fit: cover; background: linear-gradient(155deg, #8C7A57, #4E4B34);
-  }
-  .strip img { cursor: pointer; }
-  .recit-empty { text-align: center; font-style: italic; font-size: 0.9rem; color: var(--ink-faint); padding: 60px 30px; }
-
+  /* ===== PORTFOLIO ===== */
   .portfolio-frame { margin: 18px; border: 1px solid var(--line); background: var(--paper-deep); }
   .portfolio-embed { position: relative; padding-bottom: 62%; height: 0; overflow: hidden; }
   .portfolio-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
@@ -97,22 +62,15 @@
     padding: 12px 16px 14px; font-style: italic; font-size: 0.82rem;
     color: var(--ink-soft); text-align: center; border-top: 1px solid var(--line);
   }
-  .portfolio-more { text-align: center; padding: 18px 20px 0; }
+  .portfolio-more { text-align: center; padding: 18px 20px 40px; }
   .portfolio-more .open-btn {
     display: inline-block; padding: 12px 28px; border: 1px solid var(--clay);
     color: var(--clay); text-decoration: none; font-family: 'Fraunces', serif;
     font-weight: 500; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
   }
 
-  footer.contact { text-align: center; padding: 20px 20px 34px; font-style: italic; font-size: 0.84rem; color: var(--ink-soft); }
+  footer.contact { text-align: center; padding: 16px 20px 30px; font-style: italic; font-size: 0.82rem; color: var(--ink-soft); }
   footer.contact a { color: var(--clay); text-decoration: none; border-bottom: 1px solid var(--clay); }
-
-  .lightbox {
-    display: none; position: fixed; inset: 0; z-index: 100;
-    background: rgba(20,17,12,0.92); align-items: center; justify-content: center; padding: 20px;
-  }
-  .lightbox.open { display: flex; }
-  .lightbox img { max-width: 100%; max-height: 100%; }
 
   @media (prefers-color-scheme: dark) {
     body:not([data-theme="light"]) {
@@ -124,39 +82,17 @@
 </head>
 <body>
 
-<div class="hero">
-  <div class="hero-inner">
-    <svg class="mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M20 4 C20 4 13 15 13 23 C13 29 16 33 20 33 C24 33 27 29 27 23 C27 15 20 4 20 4 Z" stroke="#EFE9D8" stroke-width="1" opacity="0.75"/>
-      <path d="M20 12 L20 33" stroke="#EFE9D8" stroke-width="0.7" opacity="0.55"/>
-      <path d="M14 36 C16 34.5 24 34.5 26 36" stroke="#EFE9D8" stroke-width="0.7" opacity="0.5"/>
-    </svg>
-    <h1>Station Nina</h1>
-    <p class="place">Chili · Argentine · Panama</p>
-    <p class="dates">décembre — avril</p>
-    <p class="status" id="statusLine">chargement…</p>
-  </div>
-</div>
-
-<nav class="tabs">
-  <button class="active" data-target="carte">Carte</button>
-  <button data-target="recit">Récit</button>
-  <button data-target="portfolio">Portfolio</button>
-</nav>
+<header class="top">
+  <div class="title">Station Nina<span>Chili · Argentine · Panama</span></div>
+  <nav class="tabs">
+    <button class="active" data-target="carte">Carte</button>
+    <button data-target="portfolio">Portfolio</button>
+  </nav>
+</header>
 
 <section class="panel active" id="carte">
-  <div class="map-frame">
-    <div class="map-wrap">
-      <iframe src="https://ninarvana.travelmap.net" allow="fullscreen" title="Carte du voyage de Nina"></iframe>
-    </div>
-    <p class="map-caption">Position, trajet et étapes — mis à jour depuis le terrain</p>
-  </div>
-</section>
-
-<section class="panel" id="recit">
-  <div class="recit">
-    <p class="recit-intro">Pour la carte et le fil du quotidien, direction l'onglet Carte. Ici, les textes plus longs — quand il y a quelque chose à vraiment raconter.</p>
-    <div id="entriesList"></div>
+  <div class="map-wrap">
+    <iframe src="https://ninarvana.travelmap.net" allow="fullscreen" title="Carte du voyage de Nina"></iframe>
   </div>
 </section>
 
@@ -176,11 +112,7 @@
   Pour me joindre directement, <a href="https://wa.me/33000000000" target="_blank" rel="noopener">WhatsApp reste le plus sûr</a>.
 </footer>
 
-<div class="lightbox" id="lightbox"><img id="lightboxImg" src="" alt=""></div>
-
 <script>
-  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTqZ_oVx9ZyDEBJpiLQG4lD2dg9pUIAku7i9g3MI-XKrsKDNnfgMzHGl7d2l4ygJC5G9_5Kus2oBfgm/pub?output=csv";
-
   document.querySelectorAll('nav.tabs button').forEach(function(btn){
     btn.addEventListener('click', function(){
       document.querySelectorAll('nav.tabs button').forEach(b => b.classList.remove('active'));
@@ -189,87 +121,6 @@
       document.getElementById(btn.dataset.target).classList.add('active');
     });
   });
-
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightboxImg');
-  lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
-  function openLightbox(src){ lightboxImg.src = src; lightbox.classList.add('open'); }
-
-  function driveFileIdToImageUrl(url){
-    const m = url.match(/[-\w]{25,}/);
-    return m ? 'https://drive.google.com/uc?export=view&id=' + m[0] : null;
-  }
-  function parseFrenchDate(str){
-    const m = str.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-    if (!m) return new Date(0);
-    return new Date(+m[3], +m[2]-1, +m[1]);
-  }
-
-  const statusLine = document.getElementById('statusLine');
-  const list = document.getElementById('entriesList');
-
-  fetch(SHEET_CSV_URL)
-    .then(r => r.text())
-    .then(function(csvText){
-      const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
-      const rows = parsed.data.map(function(row){
-        const clean = {};
-        Object.keys(row).forEach(k => clean[k.trim()] = row[k]);
-        return clean;
-      });
-
-      const entries = rows.map(function(row){
-        const photoUrls = (row['Photo'] || '')
-          .split(',').map(s => s.trim()).filter(Boolean)
-          .map(driveFileIdToImageUrl).filter(Boolean);
-        const voiceUrl = row['Vocal'] ? driveFileIdToImageUrl(row['Vocal']) : null;
-        return {
-          place: row['Where'] || 'Lieu inconnu',
-          dateRaw: row['Date'] || '',
-          dateObj: parseFrenchDate(row['Date'] || ''),
-          text: row['Text'] || '',
-          photos: photoUrls,
-          voiceUrl: voiceUrl
-        };
-      }).filter(e => e.text); // récit = uniquement les entrées avec un vrai texte
-
-      if (entries.length === 0){
-        list.innerHTML = '<p class="recit-empty">Rien de long à lire pour l\'instant — les premiers textes apparaîtront ici.</p>';
-        statusLine.textContent = 'en attente de la première entrée';
-        return;
-      }
-
-      const newestFirst = [...entries].sort((a,b) => b.dateObj - a.dateObj);
-      statusLine.textContent = newestFirst[0].place + ' · dernier signal le ' + newestFirst[0].dateRaw;
-
-      newestFirst.forEach(function(e){
-        const div = document.createElement('div');
-        div.className = 'entry';
-
-        let voiceHtml = '';
-        if (e.voiceUrl){
-          voiceHtml = '<div class="voice"><audio controls src="' + e.voiceUrl + '"></audio></div>';
-        }
-        let photosHtml = '';
-        if (e.photos.length){
-          photosHtml = '<div class="strip">' +
-            e.photos.map(u => '<img src="' + u + '" loading="lazy" onclick="openLightbox(\'' + u + '\')">').join('') +
-            '</div>';
-        }
-
-        div.innerHTML =
-          '<p class="place">' + e.place + '</p>' +
-          '<p class="meta">' + e.dateRaw + '</p>' +
-          '<p class="text">' + e.text + '</p>' +
-          voiceHtml + photosHtml;
-        list.appendChild(div);
-      });
-    })
-    .catch(function(err){
-      console.error(err);
-      statusLine.textContent = 'connexion au journal indisponible';
-      list.innerHTML = '<p class="recit-empty">Impossible de charger le journal pour l\'instant.</p>';
-    });
 </script>
 
 </body>
