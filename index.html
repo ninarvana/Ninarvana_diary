@@ -81,7 +81,7 @@
 
   /* ===== PORTFOLIO ===== */
   .portfolio-frame { margin: 18px; border: 1px solid var(--line); background: var(--paper-deep); }
-  .portfolio-embed { position: relative; padding-bottom: 62%; height: 0; overflow: hidden; }
+  .portfolio-embed { position: relative; padding-bottom: min(62%, 420px); height: 0; overflow: hidden; }
   .portfolio-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
   .portfolio-caption {
     padding: 12px 16px 14px; font-style: italic; font-size: 0.82rem;
@@ -213,8 +213,8 @@
 
   .sub-map-wrap {
     position: fixed;
-    top: calc(var(--header-h, 72px) + var(--subtabs-h, 46px));
     left: 0; right: 0; bottom: 0;
+    width: 100vw; height: 100px; /* hauteur réelle imposée en JS (setHeaderHeight) */
   }
   .sub-map-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
 
@@ -655,11 +655,22 @@
     const h = document.querySelector('header.top').offsetHeight;
     document.documentElement.style.setProperty('--header-h', h + 'px');
     const subTabs = document.querySelector('.sub-tabs');
-    if (subTabs) document.documentElement.style.setProperty('--subtabs-h', subTabs.offsetHeight + 'px');
+    const subTabsH = subTabs ? subTabs.offsetHeight : 46;
+    document.documentElement.style.setProperty('--subtabs-h', subTabsH + 'px');
+
+    // La carte "Previously" est fixée en pixels réels plutôt qu'en calc()/vh,
+    // qui se comportent mal selon les navigateurs mobiles (barre d'adresse dynamique).
+    const subMapWrap = document.querySelector('.sub-map-wrap');
+    if (subMapWrap){
+      const top = h + subTabsH;
+      subMapWrap.style.top = top + 'px';
+      subMapWrap.style.height = (window.innerHeight - top) + 'px';
+    }
   }
   setHeaderHeight();
   window.addEventListener('resize', setHeaderHeight);
   window.addEventListener('orientationchange', setHeaderHeight);
+  window.addEventListener('load', setHeaderHeight);
 </script>
 
 </body>
