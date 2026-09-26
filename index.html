@@ -172,6 +172,28 @@
     flex: 0 0 auto; font-size: 0.68rem; letter-spacing: 0.05em; text-transform: uppercase;
     color: var(--clay); text-decoration: none; border-bottom: 1px solid var(--clay); white-space: nowrap;
   }
+  .ff-country {
+    display: inline-block; margin-top: 3px; font-size: 0.66rem; letter-spacing: 0.04em;
+    color: var(--ink-faint);
+  }
+
+  /* ===== Bloc statistiques — style station de données ===== */
+  .stats-block {
+    display: flex; gap: 22px; align-items: flex-start; flex-wrap: wrap;
+    margin-bottom: 26px; padding: 16px 18px; border: 1px solid var(--line); background: var(--paper-deep);
+  }
+  .stats-total { flex: 0 0 auto; text-align: center; padding-right: 20px; border-right: 1px solid var(--line); }
+  .stats-total-num { display: block; font-size: 2.1rem; font-weight: 600; color: var(--ink); line-height: 1; }
+  .stats-total-label {
+    display: block; margin-top: 5px; font-size: 0.66rem; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+  .stats-bars { flex: 1 1 200px; min-width: 180px; display: flex; flex-direction: column; gap: 6px; }
+  .stats-bar-row { display: flex; align-items: center; gap: 8px; font-size: 0.74rem; }
+  .stats-bar-label { flex: 0 0 76px; color: var(--ink-soft); font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .stats-bar-track { flex: 1; height: 7px; background: var(--paper); border: 1px solid var(--line); }
+  .stats-bar-fill { height: 100%; background: var(--clay); }
+  .stats-bar-count { flex: 0 0 22px; text-align: right; color: var(--ink-faint); font-size: 0.7rem; }
 
   /* ===== ELSEWHERE — sous-onglets ===== */
   #elsewhere.panel { padding-top: var(--header-h, 72px); }
@@ -189,7 +211,11 @@
   .sub-panel { display: none; }
   .sub-panel.active { display: block; }
 
-  .sub-map-wrap { width: 100%; height: calc(100vh - var(--header-h, 72px) - 46px); }
+  .sub-map-wrap {
+    position: fixed;
+    top: calc(var(--header-h, 72px) + var(--subtabs-h, 46px));
+    left: 0; right: 0; bottom: 0;
+  }
   .sub-map-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
 
   .allspecies-list { padding: 20px 18px 50px; max-width: 560px; margin: 0 auto; }
@@ -254,6 +280,7 @@
 
 <section class="panel" id="fieldfinds">
   <div class="especes-intro">Chaque trouvaille, dans l'ordre — <a class="ff-profile-link" href="https://www.inaturalist.org/people/ninarvana" target="_blank" rel="noopener">voir tout mon profil iNaturalist ↗</a></div>
+  <div id="ffStats"></div>
   <div id="fieldFindsList"></div>
 </section>
 
@@ -285,12 +312,12 @@
   <div class="sub-panel" id="favorites">
     <div class="portfolio-frame">
       <div class="portfolio-embed">
-        <iframe src="COLLE_ICI_LE_LIEN_EMBED_ALBUM_FAVORIS" title="Photos préférées"></iframe>
+        <iframe src="https://lightroom.adobe.com/embed/shares/e3430cac3a744459892c4b79e24c6f7e/slideshow?background_color=%23EEE8DA&color=%236E6552" title="Photos préférées"></iframe>
       </div>
       <p class="portfolio-caption">Mes photos préférées, toutes périodes confondues</p>
     </div>
     <div class="portfolio-more">
-      <a class="open-btn" href="COLLE_ICI_LE_LIEN_ALBUM_FAVORIS" target="_blank" rel="noopener">Voir toutes les photos</a>
+      <a class="open-btn" href="https://lightroom.adobe.com/shares/e3430cac3a744459892c4b79e24c6f7e" target="_blank" rel="noopener">Voir toutes les photos</a>
     </div>
   </div>
 
@@ -318,6 +345,65 @@
   }
   function normalizeName(str){
     return (str || '').trim().toLowerCase().replace(/\s+/g, ' ');
+  }
+
+  // ============================================================
+  // Pagination iNaturalist — l'API plafonne à 200 résultats par page,
+  // on boucle donc jusqu'à avoir tout récupéré (garde-fou à 10 pages).
+  // ============================================================
+  function fetchAllInatPages(baseUrl){
+    let results = [];
+    function fetchPage(page){
+      return fetch(baseUrl + '&page=' + page)
+        .then(r => r.json())
+        .then(function(data){
+          results = results.concat(data.results || []);
+          const total = data.total_results || 0;
+          if (results.length < total && (data.results || []).length > 0 && page < 10){
+            return fetchPage(page + 1);
+          }
+          return results;
+        });
+    }
+    return fetchPage(1);
+  }
+
+  // Le champ place_guess d'iNaturalist est un texte libre du type
+  // "Conguillío, Araucanía, CL" — on prend le dernier segment comme pays.
+  function extractCountry(placeGuess){
+    if (!placeGuess) return null;
+    const parts = placeGuess.split(',').map(p => p.trim()).filter(Boolean);
+    return parts.length ? parts[parts.length - 1] : null;
+  }
+
+  function renderFieldFindsStats(observations){
+    const el = document.getElementById('ffStats');
+    if (!el) return;
+    const total = observations.length;
+    const counts = {};
+    observations.forEach(function(obs){
+      const country = extractCountry(obs.place_guess);
+      if (!country) return;
+      counts[country] = (counts[country] || 0) + 1;
+    });
+    const countries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    const maxCount = countries.length ? countries[0][1] : 1;
+
+    let html = '<div class="stats-block">';
+    html += '<div class="stats-total"><span class="stats-total-num">' + total + '</span><span class="stats-total-label">Observations</span></div>';
+    if (countries.length){
+      html += '<div class="stats-bars">';
+      countries.forEach(function(entry){
+        const country = entry[0], count = entry[1];
+        const pct = Math.round((count / maxCount) * 100);
+        html += '<div class="stats-bar-row"><span class="stats-bar-label">' + country + '</span>' +
+          '<div class="stats-bar-track"><div class="stats-bar-fill" style="width:' + pct + '%"></div></div>' +
+          '<span class="stats-bar-count">' + count + '</span></div>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+    el.innerHTML = html;
   }
 
   function renderEspeces(rows, inatMap){
@@ -369,11 +455,10 @@
   function fetchInatObservations(){
     if (!INATURALIST_USERNAME) return Promise.resolve({});
     const url = 'https://api.inaturalist.org/v1/observations?user_login=' + encodeURIComponent(INATURALIST_USERNAME) + '&per_page=200&order_by=observed_on&order=desc';
-    return fetch(url)
-      .then(r => r.json())
-      .then(function(data){
+    return fetchAllInatPages(url)
+      .then(function(results){
         const map = {};
-        (data.results || []).forEach(function(obs){
+        results.forEach(function(obs){
           const taxonName = obs.taxon && obs.taxon.name;
           if (!taxonName) return;
           const key = normalizeName(taxonName);
@@ -447,11 +532,11 @@
       return;
     }
     const url = 'https://api.inaturalist.org/v1/observations?project_id=' + encodeURIComponent(INATURALIST_PROJECT) + '&per_page=200&order_by=observed_on&order=desc';
-    fetch(url)
-      .then(r => r.json())
-      .then(function(data){
-        const withTaxon = (data.results || []).filter(o => o.taxon);
+    fetchAllInatPages(url)
+      .then(function(results){
+        const withTaxon = results.filter(o => o.taxon);
         ffList.innerHTML = '';
+        renderFieldFindsStats(withTaxon);
         if (withTaxon.length === 0){
           ffList.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">Rien à afficher pour l\'instant.</p>';
           return;
@@ -462,12 +547,16 @@
           const photo = obs.photos && obs.photos[0] && obs.photos[0].url;
           const commonName = obs.taxon.preferred_common_name || obs.taxon.name;
           const date = obs.observed_on || '';
+          const country = extractCountry(obs.place_guess);
           const obsUrl = obs.uri || ('https://www.inaturalist.org/observations/' + obs.id);
           const row = document.createElement('div');
           row.className = 'ff-row';
           row.innerHTML =
             '<div class="ff-thumb">' + (photo ? '<img src="' + photo.replace('square.', 'small.') + '" loading="lazy">' : '') + '</div>' +
-            '<div class="ff-info"><div class="ff-name">' + commonName + '</div>' + (date ? '<div class="ff-date">' + date + '</div>' : '') + '</div>' +
+            '<div class="ff-info"><div class="ff-name">' + commonName + '</div>' +
+              (date ? '<div class="ff-date">' + date + '</div>' : '') +
+              (country ? '<div class="ff-country">' + country + '</div>' : '') +
+            '</div>' +
             '<a class="ff-link" href="' + obsUrl + '" target="_blank" rel="noopener">Voir</a>';
           rows.appendChild(row);
         });
@@ -498,12 +587,11 @@
     const container = document.getElementById('allSpeciesList');
     container.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">Chargement…</p>';
     const url = 'https://api.inaturalist.org/v1/observations?user_login=' + encodeURIComponent(INATURALIST_USERNAME) + '&per_page=200&order_by=observed_on&order=desc';
-    fetch(url)
-      .then(r => r.json())
-      .then(function(data){
+    fetchAllInatPages(url)
+      .then(function(results){
         const seen = {};
         const groups = {};
-        (data.results || []).forEach(function(obs){
+        results.forEach(function(obs){
           if (!obs.taxon) return;
           const latin = obs.taxon.name;
           if (seen[latin]) return;
@@ -566,6 +654,8 @@
   function setHeaderHeight(){
     const h = document.querySelector('header.top').offsetHeight;
     document.documentElement.style.setProperty('--header-h', h + 'px');
+    const subTabs = document.querySelector('.sub-tabs');
+    if (subTabs) document.documentElement.style.setProperty('--subtabs-h', subTabs.offsetHeight + 'px');
   }
   setHeaderHeight();
   window.addEventListener('resize', setHeaderHeight);
