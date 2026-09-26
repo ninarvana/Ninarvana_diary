@@ -81,7 +81,7 @@
 
   /* ===== PORTFOLIO ===== */
   .portfolio-frame { margin: 18px; border: 1px solid var(--line); background: var(--paper-deep); }
-  .portfolio-embed { position: relative; padding-bottom: min(62%, 420px); height: 0; overflow: hidden; }
+  .portfolio-embed { position: relative; padding-bottom: min(62%, 520px); height: 0; overflow: hidden; }
   .portfolio-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
   .portfolio-caption {
     padding: 12px 16px 14px; font-style: italic; font-size: 0.82rem;
@@ -576,6 +576,8 @@
       document.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
       document.getElementById(btn.dataset.subtarget).classList.add('active');
+      // le panel vient de devenir visible : (re)mesurer maintenant, pas avant
+      setHeaderHeight();
     });
   });
 
@@ -636,6 +638,8 @@
       document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
       document.getElementById(btn.dataset.target).classList.add('active');
+      // le panel vient de devenir visible : (re)mesurer maintenant, pas avant
+      setHeaderHeight();
     });
   });
 
