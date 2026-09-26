@@ -173,6 +173,38 @@
     color: var(--clay); text-decoration: none; border-bottom: 1px solid var(--clay); white-space: nowrap;
   }
 
+  /* ===== ELSEWHERE — sous-onglets ===== */
+  #elsewhere.panel { padding-top: var(--header-h, 72px); }
+  .sub-tabs {
+    position: sticky; top: var(--header-h, 72px); z-index: 20;
+    display: flex; background: var(--paper); border-bottom: 1px solid var(--line);
+  }
+  .sub-tabs button {
+    flex: 1; background: none; border: none;
+    font-family: 'Fraunces', serif; font-weight: 500; font-size: 0.7rem;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint);
+    padding: 12px 4px; cursor: pointer; border-bottom: 2px solid transparent;
+  }
+  .sub-tabs button.active { color: var(--ink); border-bottom-color: var(--clay); }
+  .sub-panel { display: none; }
+  .sub-panel.active { display: block; }
+
+  .sub-map-wrap { width: 100%; height: calc(100vh - var(--header-h, 72px) - 46px); }
+  .sub-map-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
+
+  .allspecies-list { padding: 20px 18px 50px; max-width: 560px; margin: 0 auto; }
+  .as-group-title {
+    font-weight: 600; font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--clay); margin: 26px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--line);
+  }
+  .as-group-title:first-child { margin-top: 0; }
+  .as-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 0.88rem;
+  }
+  .as-row .common { color: var(--ink); }
+  .as-row .latin { font-style: italic; color: var(--ink-faint); font-size: 0.78rem; }
+
   @media (prefers-color-scheme: dark) {
     body:not([data-theme="light"]) {
       --paper: #211D17; --paper-deep: #2A251D; --ink: #EDE7D8;
@@ -201,6 +233,7 @@
       <button data-target="especes">ViolaDex</button>
       <button data-target="fieldfinds">Field Finds</button>
       <button data-target="portfolio">Portfolio</button>
+      <button data-target="elsewhere">Previously</button>
     </nav>
   </div>
 </header>
@@ -233,6 +266,36 @@
   </div>
   <div class="portfolio-more">
     <a class="open-btn" href="https://lightroom.adobe.com/shares/e3430cac3a744459892c4b79e24c6f7e" target="_blank" rel="noopener">Voir toutes les photos</a>
+  </div>
+</section>
+
+<section class="panel" id="elsewhere">
+  <div class="sub-tabs">
+    <button class="active" data-subtarget="pasttrips">Past Trips</button>
+    <button data-subtarget="favorites">Favorites</button>
+    <button data-subtarget="allspecies">All Species</button>
+  </div>
+
+  <div class="sub-panel active" id="pasttrips">
+    <div class="sub-map-wrap">
+      <iframe src="https://ninarvana.travelmap.net/beyond" allow="fullscreen" title="Voyages passés"></iframe>
+    </div>
+  </div>
+
+  <div class="sub-panel" id="favorites">
+    <div class="portfolio-frame">
+      <div class="portfolio-embed">
+        <iframe src="COLLE_ICI_LE_LIEN_EMBED_ALBUM_FAVORIS" title="Photos préférées"></iframe>
+      </div>
+      <p class="portfolio-caption">Mes photos préférées, toutes périodes confondues</p>
+    </div>
+    <div class="portfolio-more">
+      <a class="open-btn" href="COLLE_ICI_LE_LIEN_ALBUM_FAVORIS" target="_blank" rel="noopener">Voir toutes les photos</a>
+    </div>
+  </div>
+
+  <div class="sub-panel" id="allspecies">
+    <div class="allspecies-list" id="allSpeciesList"></div>
   </div>
 </section>
 
@@ -416,6 +479,68 @@
       });
   }
   loadFieldFinds();
+
+  // ===== Sous-onglets Elsewhere =====
+  document.querySelectorAll('.sub-tabs button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.sub-tabs button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.subtarget).classList.add('active');
+    });
+  });
+
+  // ===== All Species — tout le profil iNaturalist, dédupliqué, trié =====
+  let allSpeciesLoaded = false;
+  function loadAllSpecies(){
+    if (allSpeciesLoaded) return;
+    allSpeciesLoaded = true;
+    const container = document.getElementById('allSpeciesList');
+    container.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">Chargement…</p>';
+    const url = 'https://api.inaturalist.org/v1/observations?user_login=' + encodeURIComponent(INATURALIST_USERNAME) + '&per_page=200&order_by=observed_on&order=desc';
+    fetch(url)
+      .then(r => r.json())
+      .then(function(data){
+        const seen = {};
+        const groups = {};
+        (data.results || []).forEach(function(obs){
+          if (!obs.taxon) return;
+          const latin = obs.taxon.name;
+          if (seen[latin]) return;
+          seen[latin] = true;
+          const iconic = obs.taxon.iconic_taxon_name || 'Unknown';
+          const common = obs.taxon.preferred_common_name;
+          if (!groups[iconic]) groups[iconic] = [];
+          groups[iconic].push({ latin: latin, common: common });
+        });
+        Object.keys(groups).forEach(k => groups[k].sort((a,b) => a.latin.localeCompare(b.latin)));
+
+        container.innerHTML = '';
+        const order = ICONIC_ORDER.filter(k => groups[k]).concat(Object.keys(groups).filter(k => !ICONIC_ORDER.includes(k)));
+        if (order.length === 0){
+          container.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">Aucune espèce pour l\'instant.</p>';
+          return;
+        }
+        order.forEach(function(key){
+          const title = document.createElement('p');
+          title.className = 'as-group-title';
+          title.textContent = (ICONIC_LABELS[key] || key) + ' · ' + groups[key].length;
+          container.appendChild(title);
+          groups[key].forEach(function(sp){
+            const row = document.createElement('div');
+            row.className = 'as-row';
+            row.innerHTML = '<span class="common">' + (sp.common || sp.latin) + '</span><span class="latin">' + sp.latin + '</span>';
+            container.appendChild(row);
+          });
+        });
+      })
+      .catch(function(err){
+        console.error(err);
+        container.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">Liste indisponible pour l\'instant.</p>';
+      });
+  }
+  // charge seulement quand on ouvre l'onglet, pas au chargement de la page
+  document.querySelector('[data-subtarget="allspecies"]').addEventListener('click', loadAllSpecies);
 
   document.querySelectorAll('nav.tabs button').forEach(function(btn){
     btn.addEventListener('click', function(){
