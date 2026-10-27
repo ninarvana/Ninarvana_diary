@@ -55,6 +55,20 @@
   header.top .clock b { color: #EFE9D8; font-weight: 500; }
 
 
+
+  /* ===== BILLETS D'HUMEUR — page discrète, hors navigation ===== */
+  #humeurs.panel { padding: calc(var(--header-h, 72px) + 24px) 20px 50px; max-width: 600px; margin: 0 auto; }
+  .hm-back { display: inline-block; font-size: 0.78rem; font-style: italic; color: var(--ink-faint); text-decoration: none; margin-bottom: 18px; }
+  .hm-title { margin: 0 0 4px; font-weight: 600; font-size: 1.3rem; color: var(--ink); }
+  .hm-sub { margin: 0 0 32px; font-style: italic; font-size: 0.84rem; color: var(--ink-faint); }
+  .hm-post { margin-bottom: 46px; padding-bottom: 30px; border-bottom: 1px solid var(--line); }
+  .hm-post:last-child { border-bottom: none; }
+  .hm-date { font-style: italic; font-size: 0.74rem; color: var(--ink-faint); margin-bottom: 4px; }
+  .hm-post-title { margin: 0 0 14px; font-weight: 600; font-size: 1.1rem; line-height: 1.35; color: var(--ink); }
+  .hm-body p { margin: 0 0 14px; font-size: 0.98rem; line-height: 1.75; color: var(--ink); }
+  .hm-link-wrap { margin-top: 10px; }
+  footer.contact a.hm-link { font-size: 0.72rem; color: var(--ink-faint); border-bottom: 1px dotted var(--ink-faint); }
+
   /* ===== Sélecteur de langue ===== */
   .lang-switch { display: flex; gap: 2px; }
   .lang-switch button {
@@ -353,8 +367,16 @@
   </div>
 </section>
 
+<section class="panel" id="humeurs">
+  <a class="hm-back" id="hmBack" href="#" data-i18n="hm_back">← Retour</a>
+  <h2 class="hm-title" data-i18n="hm_title">Billets d'humeur</h2>
+  <p class="hm-sub" data-i18n="hm_sub">Réflexions en vrac. Pas pour tout le monde.</p>
+  <div id="hmList"></div>
+</section>
+
 <footer class="contact">
-  <span data-i18n="footer_msg">Un petit message sur WhatsApp me fait toujours plaisir :)</span>
+  <span data-i18n="footer_msg">Une question, des nouvelles ? Écris-moi sur WhatsApp.</span>
+  <div class="hm-link-wrap" id="hmLinkWrap" hidden><a class="hm-link" href="#humeurs" data-i18n="hm_link">Billets d'humeur</a></div>
 </footer>
 
 <script>
@@ -363,6 +385,9 @@
   // ============================================================
   const ESPECES_CSV_URL = "COLLE_ICI_LE_LIEN_CSV_DE_L_ONGLET_ESPECES";
   const INATURALIST_USERNAME = "ninarvana";
+  // Onglet "Humeurs" du Sheet (Fichier > Partager > Publier sur le web > CSV).
+  // Colonnes : Date | Titre | Texte | Title | Text   (l'anglais est facultatif)
+  const HUMEURS_CSV_URL = "COLLE_ICI_LE_LIEN_CSV_DE_L_ONGLET_HUMEURS";
 
   // ============================================================
   // Langue FR / EN — ?lang=en dans le lien force la langue,
@@ -378,11 +403,12 @@
       album_title: 'Album photo de Nina', portfolio_caption: 'Les dernières photos du voyage', see_all: 'Voir toutes les photos',
       sub_past: 'Voyages passés', sub_fav: 'Favoris', sub_all: 'Toutes les espèces',
       past_title: 'Voyages passés', fav_title: 'Photos préférées', fav_caption: 'Mes photos préférées, toutes périodes confondues',
-      footer_msg: 'Un petit message sur WhatsApp me fait toujours plaisir :)',
+      footer_msg: 'Une question, des nouvelles ? Écris-moi sur WhatsApp.',
       found: 'Trouvée', no_finds: 'Pas encore de trouvaille à célébrer.', list_unavailable: "Liste indisponible pour l'instant.",
       sheet_unconfigured: 'Lien du Sheet pas encore configuré.', project_unconfigured: 'Project iNaturalist pas encore configuré.',
       nothing_yet: "Rien à afficher pour l'instant.", unavailable: "Indisponible pour l'instant.",
-      observations: 'Observations', loading: 'Chargement…', no_species: "Aucune espèce pour l'instant.", see: 'Voir'
+      observations: 'Observations', loading: 'Chargement…', no_species: "Aucune espèce pour l'instant.", see: 'Voir',
+      hm_link: "Billets d'humeur", hm_back: '← Retour', hm_title: "Billets d'humeur", hm_sub: 'Réflexions en vrac. Pas pour tout le monde.'
     },
     en: {
       subtitle: 'Chile · Argentina', clock: "Nina's time",
@@ -393,11 +419,12 @@
       album_title: "Nina's photo album", portfolio_caption: 'The latest photos from the trip', see_all: 'See all photos',
       sub_past: 'Past Trips', sub_fav: 'Favorites', sub_all: 'All Species',
       past_title: 'Past trips', fav_title: 'Favorite photos', fav_caption: 'My favorite photos, from all periods',
-      footer_msg: 'A message on WhatsApp always makes my day :)',
+      footer_msg: 'Questions, news? Message me on WhatsApp.',
       found: 'Found', no_finds: 'Nothing to celebrate yet.', list_unavailable: 'List unavailable for now.',
       sheet_unconfigured: 'Sheet link not set up yet.', project_unconfigured: 'iNaturalist project not set up yet.',
       nothing_yet: 'Nothing to show yet.', unavailable: 'Unavailable for now.',
-      observations: 'Observations', loading: 'Loading…', no_species: 'No species yet.', see: 'View'
+      observations: 'Observations', loading: 'Loading…', no_species: 'No species yet.', see: 'View',
+      hm_link: 'Musings', hm_back: '← Back', hm_title: 'Musings', hm_sub: 'Loose thoughts. Not for everyone.'
     }
   };
   const ICONIC_LABELS_I18N = {
@@ -773,6 +800,84 @@
   updateBarilocheClock();
   setInterval(updateBarilocheClock, 30000);
 
+
+  // ============================================================
+  // Billets d'humeur — page cachée (pas dans la navigation) : lien discret
+  // en pied de page, ou directement ton-lien/#humeurs
+  // ============================================================
+  const HUMEURS_CONFIGURED = HUMEURS_CSV_URL.indexOf('COLLE_ICI') === -1;
+  let humeursRows = null;
+
+  function renderHumeurs(){
+    const list = document.getElementById('hmList');
+    list.innerHTML = '';
+    if (!HUMEURS_CONFIGURED){
+      list.innerHTML = '<p class="hm-sub">' + t('sheet_unconfigured') + '</p>';
+      return;
+    }
+    if (humeursRows === null){
+      list.innerHTML = '<p class="hm-sub">' + t('loading') + '</p>';
+      return;
+    }
+    const posts = humeursRows.map(function(row){
+      const fr = { title: row['Titre'] || row['Title'] || '', text: row['Texte'] || row['Text'] || '' };
+      const en = { title: row['Title'] || row['Titre'] || '', text: row['Text'] || row['Texte'] || '' };
+      const pick = currentLang === 'en' ? en : fr;
+      return { date: (row['Date'] || '').trim(), title: pick.title.trim(), text: pick.text.trim() };
+    }).filter(function(p){ return p.title || p.text; }).reverse(); // le plus récent d'abord
+    if (posts.length === 0){
+      list.innerHTML = '<p class="hm-sub">' + t('nothing_yet') + '</p>';
+      return;
+    }
+    posts.forEach(function(p){
+      const art = document.createElement('article');
+      art.className = 'hm-post';
+      if (p.date){ const d = document.createElement('div'); d.className = 'hm-date'; d.textContent = p.date; art.appendChild(d); }
+      if (p.title){ const h = document.createElement('h3'); h.className = 'hm-post-title'; h.textContent = p.title; art.appendChild(h); }
+      const body = document.createElement('div'); body.className = 'hm-body';
+      p.text.split(/\n+/).forEach(function(par){
+        if (!par.trim()) return;
+        const el = document.createElement('p'); el.textContent = par; body.appendChild(el); // textContent : rien du Sheet n'est interprété comme du HTML
+      });
+      art.appendChild(body);
+      list.appendChild(art);
+    });
+  }
+
+  function loadHumeurs(){
+    if (!HUMEURS_CONFIGURED || humeursRows !== null) return renderHumeurs();
+    renderHumeurs();
+    fetch(HUMEURS_CSV_URL).then(r => r.text()).then(function(csv){
+      humeursRows = Papa.parse(csv, { header: true, skipEmptyLines: true }).data.map(function(row){
+        const clean = {};
+        Object.keys(row).forEach(k => clean[k.trim()] = row[k]);
+        return clean;
+      });
+      renderHumeurs();
+    }).catch(function(err){
+      console.error(err);
+      document.getElementById('hmList').innerHTML = '<p class="hm-sub">' + t('unavailable') + '</p>';
+    });
+  }
+
+  function openHumeurs(){
+    document.querySelectorAll('nav.tabs button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('humeurs').classList.add('active');
+    setHeaderHeight();
+    window.scrollTo(0, 0);
+    loadHumeurs();
+  }
+  function checkHumeursHash(){ if (location.hash === '#humeurs') openHumeurs(); }
+  window.addEventListener('hashchange', checkHumeursHash);
+  document.getElementById('hmBack').addEventListener('click', function(e){
+    e.preventDefault();
+    history.replaceState(null, '', location.pathname + location.search);
+    document.querySelector('nav.tabs button[data-target="carte"]').click();
+  });
+  // le lien du pied de page n'apparaît que si le Sheet est branché
+  if (HUMEURS_CONFIGURED) document.getElementById('hmLinkWrap').hidden = false;
+
   // ===== Changement de langue =====
   function setLang(lang){
     currentLang = lang;
@@ -780,6 +885,7 @@
     applyStaticLang();
     loadEspeces();
     loadFieldFinds();
+    renderHumeurs();
     allSpeciesLoaded = false;
     const allPanel = document.getElementById('allspecies');
     if (allPanel && allPanel.classList.contains('active')) loadAllSpecies();
@@ -810,6 +916,7 @@
   window.addEventListener('resize', setHeaderHeight);
   window.addEventListener('orientationchange', setHeaderHeight);
   window.addEventListener('load', setHeaderHeight);
+  checkHumeursHash();
 </script>
 
 </body>
