@@ -54,6 +54,18 @@
   header.top .clock svg { width: 13px; height: 13px; opacity: 0.7; }
   header.top .clock b { color: #EFE9D8; font-weight: 500; }
 
+
+  /* ===== Sélecteur de langue ===== */
+  .lang-switch { display: flex; gap: 2px; }
+  .lang-switch button {
+    background: none; border: 1px solid rgba(255,255,255,0.25); color: #C9C0A6; cursor: pointer;
+    font-family: 'Fraunces', serif; font-weight: 500; font-size: 0.64rem; letter-spacing: 0.08em;
+    padding: 4px 7px;
+  }
+  .lang-switch button:first-child { border-radius: 4px 0 0 4px; }
+  .lang-switch button:last-child { border-radius: 0 4px 4px 0; }
+  .lang-switch button.active { background: var(--clay); border-color: var(--clay); color: #EFE9D8; }
+
   nav.tabs { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; }
   nav.tabs::-webkit-scrollbar { display: none; }
   nav.tabs button {
@@ -258,39 +270,43 @@
       <!-- Remplacer par <img src="..." alt=""> une fois le dessin synthétisé prêt -->
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4" stroke="#EFE9D8" stroke-width="1"/></svg>
     </div>
-    <div class="title">Following the Violacrumbs<span>Chili · Argentine</span></div>
+    <div class="title">Following the Violacrumbs<span data-i18n="subtitle">Chili · Argentine</span></div>
   </div>
   <div class="right">
     <div class="clock" id="barilocheClock">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="#C9C0A6" stroke-width="1.2"/><path d="M12 7v5l3 2" stroke="#C9C0A6" stroke-width="1.2" stroke-linecap="round"/></svg>
-      <span>Nina's Time <b id="barilocheTime">--:--</b></span>
+      <span><span data-i18n="clock">Heure de Nina</span> <b id="barilocheTime">--:--</b></span>
+    </div>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" data-lang="fr">FR</button>
+      <button type="button" data-lang="en">EN</button>
     </div>
     <nav class="tabs">
-      <button class="active" data-target="carte">Map</button>
+      <button class="active" data-target="carte" data-i18n="tab_map">Carte</button>
       <button data-target="especes">ViolaDex</button>
-      <button data-target="fieldfinds">Field Finds</button>
+      <button data-target="fieldfinds" data-i18n="tab_finds">Trouvailles</button>
       <button data-target="portfolio">Portfolio</button>
-      <button data-target="elsewhere">Previously</button>
+      <button data-target="elsewhere" data-i18n="tab_prev">Avant</button>
     </nav>
   </div>
 </header>
 
 <section class="panel active" id="carte">
   <div class="map-wrap">
-    <iframe src="https://ninarvana.travelmap.net" allow="fullscreen" title="Carte du voyage de Nina"></iframe>
+    <iframe src="https://ninarvana.travelmap.net" allow="fullscreen" data-i18n-title="map_title" title="Carte du voyage de Nina"></iframe>
   </div>
 </section>
 
 <section class="panel" id="especes">
-  <div class="hof-title">Hall of Fame<span>So pretty, my favorites</span></div>
+  <div class="hof-title">Hall of Fame<span data-i18n="hof_sub">Si jolies, mes préférées</span></div>
   <div class="especes-grid" id="hofGrid"></div>
 
-  <div class="hof-title wanted-title">Wanted<span>Still missing</span></div>
+  <div class="hof-title wanted-title">Wanted<span data-i18n="wanted_sub">Encore à trouver</span></div>
   <div class="especes-grid" id="wantedGrid"></div>
 </section>
 
 <section class="panel" id="fieldfinds">
-  <div class="especes-intro">Chaque trouvaille, dans l'ordre — <a class="ff-profile-link" href="https://www.inaturalist.org/people/ninarvana" target="_blank" rel="noopener">voir tout mon profil iNaturalist ↗</a></div>
+  <div class="especes-intro"><span data-i18n="ff_intro">Chaque trouvaille, dans l'ordre —</span> <a class="ff-profile-link" data-i18n="ff_profile" href="https://www.inaturalist.org/people/ninarvana" target="_blank" rel="noopener">voir tout mon profil iNaturalist ↗</a></div>
   <div id="ffStats"></div>
   <div id="fieldFindsList"></div>
 </section>
@@ -298,37 +314,37 @@
 <section class="panel" id="portfolio">
   <div class="portfolio-frame">
     <div class="portfolio-embed">
-      <iframe src="https://lightroom.adobe.com/embed/shares/03933db337db49f4bfdf788d855f148e/slideshow?background_color=%23EEE8DA&color=%236E6552" title="Album photo de Nina"></iframe>
+      <iframe src="https://lightroom.adobe.com/embed/shares/03933db337db49f4bfdf788d855f148e/slideshow?background_color=%23EEE8DA&color=%236E6552" data-i18n-title="album_title" title="Album photo de Nina"></iframe>
     </div>
-    <p class="portfolio-caption">Les dernières photos du voyage</p>
+    <p class="portfolio-caption" data-i18n="portfolio_caption">Les dernières photos du voyage</p>
   </div>
   <div class="portfolio-more">
-    <a class="open-btn" href="https://adobe.ly/4yZNQLA" target="_blank" rel="noopener">Voir toutes les photos</a>
+    <a class="open-btn" href="https://adobe.ly/4yZNQLA" target="_blank" rel="noopener" data-i18n="see_all">Voir toutes les photos</a>
   </div>
 </section>
 
 <section class="panel" id="elsewhere">
   <div class="sub-tabs">
-    <button class="active" data-subtarget="pasttrips">Past Trips</button>
-    <button data-subtarget="favorites">Favorites</button>
-    <button data-subtarget="allspecies">All Species</button>
+    <button class="active" data-subtarget="pasttrips" data-i18n="sub_past">Voyages passés</button>
+    <button data-subtarget="favorites" data-i18n="sub_fav">Favoris</button>
+    <button data-subtarget="allspecies" data-i18n="sub_all">Toutes les espèces</button>
   </div>
 
   <div class="sub-panel active" id="pasttrips">
     <div class="sub-map-wrap">
-      <iframe src="https://ninarvana.travelmap.net/beyond" allow="fullscreen" title="Voyages passés"></iframe>
+      <iframe src="https://ninarvana.travelmap.net/beyond" allow="fullscreen" data-i18n-title="past_title" title="Voyages passés"></iframe>
     </div>
   </div>
 
   <div class="sub-panel" id="favorites">
     <div class="portfolio-frame">
       <div class="portfolio-embed">
-        <iframe src="https://lightroom.adobe.com/embed/shares/b222dd7ea2f548e8b9bd98b199f80ce9/slideshow?background_color=%23EEE8DA&color=%236E6552" title="Photos préférées"></iframe>
+        <iframe src="https://lightroom.adobe.com/embed/shares/b222dd7ea2f548e8b9bd98b199f80ce9/slideshow?background_color=%23EEE8DA&color=%236E6552" data-i18n-title="fav_title" title="Photos préférées"></iframe>
       </div>
-      <p class="portfolio-caption">Mes photos préférées, toutes périodes confondues</p>
+      <p class="portfolio-caption" data-i18n="fav_caption">Mes photos préférées, toutes périodes confondues</p>
     </div>
     <div class="portfolio-more">
-      <a class="open-btn" href="https://adobe.ly/4rycTTb" target="_blank" rel="noopener">Voir toutes les photos</a>
+      <a class="open-btn" href="https://adobe.ly/4rycTTb" target="_blank" rel="noopener" data-i18n="see_all">Voir toutes les photos</a>
     </div>
   </div>
 
@@ -338,7 +354,7 @@
 </section>
 
 <footer class="contact">
-  Stay in touch with <a href="https://wa.me/33000000000" target="_blank" rel="noopener">WhatsApp</a> :)
+  <span data-i18n="footer_pre">Gardons le contact sur</span> <a href="https://wa.me/33000000000" target="_blank" rel="noopener">WhatsApp</a> :)
 </footer>
 
 <script>
@@ -347,6 +363,75 @@
   // ============================================================
   const ESPECES_CSV_URL = "COLLE_ICI_LE_LIEN_CSV_DE_L_ONGLET_ESPECES";
   const INATURALIST_USERNAME = "ninarvana";
+
+  // ============================================================
+  // Langue FR / EN — ?lang=en dans le lien force la langue,
+  // sinon dernier choix mémorisé, sinon langue du navigateur.
+  // ============================================================
+  const I18N = {
+    fr: {
+      subtitle: 'Chili · Argentine', clock: 'Heure de Nina',
+      tab_map: 'Carte', tab_finds: 'Trouvailles', tab_prev: 'Avant',
+      map_title: 'Carte du voyage de Nina',
+      hof_sub: 'Si jolies, mes préférées', wanted_sub: 'Encore à trouver',
+      ff_intro: "Chaque trouvaille, dans l'ordre —", ff_profile: 'voir tout mon profil iNaturalist ↗',
+      album_title: 'Album photo de Nina', portfolio_caption: 'Les dernières photos du voyage', see_all: 'Voir toutes les photos',
+      sub_past: 'Voyages passés', sub_fav: 'Favoris', sub_all: 'Toutes les espèces',
+      past_title: 'Voyages passés', fav_title: 'Photos préférées', fav_caption: 'Mes photos préférées, toutes périodes confondues',
+      footer_pre: 'Gardons le contact sur',
+      found: 'Trouvée', no_finds: 'Pas encore de trouvaille à célébrer.', list_unavailable: "Liste indisponible pour l'instant.",
+      sheet_unconfigured: 'Lien du Sheet pas encore configuré.', project_unconfigured: 'Project iNaturalist pas encore configuré.',
+      nothing_yet: "Rien à afficher pour l'instant.", unavailable: "Indisponible pour l'instant.",
+      observations: 'Observations', loading: 'Chargement…', no_species: "Aucune espèce pour l'instant.", see: 'Voir'
+    },
+    en: {
+      subtitle: 'Chile · Argentina', clock: "Nina's time",
+      tab_map: 'Map', tab_finds: 'Field Finds', tab_prev: 'Previously',
+      map_title: "Map of Nina's trip",
+      hof_sub: 'So pretty, my favorites', wanted_sub: 'Still missing',
+      ff_intro: 'Every find, in order —', ff_profile: 'see my full iNaturalist profile ↗',
+      album_title: "Nina's photo album", portfolio_caption: 'The latest photos from the trip', see_all: 'See all photos',
+      sub_past: 'Past Trips', sub_fav: 'Favorites', sub_all: 'All Species',
+      past_title: 'Past trips', fav_title: 'Favorite photos', fav_caption: 'My favorite photos, from all periods',
+      footer_pre: 'Stay in touch on',
+      found: 'Found', no_finds: 'Nothing to celebrate yet.', list_unavailable: 'List unavailable for now.',
+      sheet_unconfigured: 'Sheet link not set up yet.', project_unconfigured: 'iNaturalist project not set up yet.',
+      nothing_yet: 'Nothing to show yet.', unavailable: 'Unavailable for now.',
+      observations: 'Observations', loading: 'Loading…', no_species: 'No species yet.', see: 'View'
+    }
+  };
+  const ICONIC_LABELS_I18N = {
+    fr: { Aves: 'Oiseaux', Plantae: 'Plantes', Mammalia: 'Mammifères', Insecta: 'Insectes', Amphibia: 'Amphibiens', Reptilia: 'Reptiles',
+          Fungi: 'Champignons', Mollusca: 'Mollusques', Arachnida: 'Arachnides', Actinopterygii: 'Poissons', Animalia: 'Autres animaux',
+          Chromista: 'Algues', Protozoa: 'Protozoaires', Unknown: 'Non identifié' },
+    en: { Aves: 'Birds', Plantae: 'Plants', Mammalia: 'Mammals', Insecta: 'Insects', Amphibia: 'Amphibians', Reptilia: 'Reptiles',
+          Fungi: 'Fungi', Mollusca: 'Molluscs', Arachnida: 'Arachnids', Actinopterygii: 'Fish', Animalia: 'Other animals',
+          Chromista: 'Algae', Protozoa: 'Protozoa', Unknown: 'Unidentified' }
+  };
+
+  function detectLang(){
+    try {
+      const q = new URLSearchParams(location.search).get('lang');
+      if (q === 'fr' || q === 'en') return q;
+    } catch (e) {}
+    try {
+      const saved = localStorage.getItem('lang');
+      if (saved === 'fr' || saved === 'en') return saved;
+    } catch (e) {}
+    return (navigator.language || 'fr').toLowerCase().indexOf('fr') === 0 ? 'fr' : 'en';
+  }
+  let currentLang = detectLang();
+  function t(key){ return (I18N[currentLang] && I18N[currentLang][key]) || I18N.fr[key] || key; }
+  function iconicLabel(key){ return ICONIC_LABELS_I18N[currentLang][key] || key; }
+
+  function applyStaticLang(){
+    document.documentElement.lang = currentLang;
+    document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-title]').forEach(function(el){ el.setAttribute('title', t(el.dataset.i18nTitle)); });
+    document.querySelectorAll('.lang-switch button').forEach(function(b){
+      b.classList.toggle('active', b.dataset.lang === currentLang);
+    });
+  }
 
   const GENERIC_SILHOUETTE = '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 42V22" stroke="currentColor" stroke-width="1.5"/><path d="M24 22C24 22 12 20 12 10C12 10 24 10 24 22Z" stroke="currentColor" stroke-width="1.5"/><path d="M24 22C24 22 36 20 36 10C36 10 24 10 24 22Z" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/></svg>';
 
@@ -384,7 +469,13 @@
   function extractCountry(placeGuess){
     if (!placeGuess) return null;
     const parts = placeGuess.split(',').map(p => p.trim()).filter(Boolean);
-    return parts.length ? parts[parts.length - 1] : null;
+    if (!parts.length) return null;
+    const last = parts[parts.length - 1];
+    // iNaturalist termine parfois par un code pays (CL, AR…) : on le traduit dans la langue choisie
+    if (/^[A-Z]{2}$/.test(last) && window.Intl && Intl.DisplayNames){
+      try { return new Intl.DisplayNames([currentLang], { type: 'region' }).of(last) || last; } catch (e) {}
+    }
+    return last;
   }
 
   function renderFieldFindsStats(observations){
@@ -401,7 +492,7 @@
     const maxCount = countries.length ? countries[0][1] : 1;
 
     let html = '<div class="stats-block">';
-    html += '<div class="stats-total"><span class="stats-total-num">' + total + '</span><span class="stats-total-label">Observations</span></div>';
+    html += '<div class="stats-total"><span class="stats-total-num">' + total + '</span><span class="stats-total-label">' + t('observations') + '</span></div>';
     if (countries.length){
       html += '<div class="stats-bars">';
       countries.forEach(function(entry){
@@ -441,7 +532,7 @@
             '<div class="flip-face back"><img src="' + photoUrl + '" loading="lazy"></div>' +
           '</div></div>' +
           '<div class="espece-name">' + name + '</div>' +
-          '<div class="espece-check">Trouvée' + (inatPhoto && !manualPhoto ? ' · iNaturalist' : '') + '</div>';
+          '<div class="espece-check">' + t('found') + (inatPhoto && !manualPhoto ? ' · iNaturalist' : '') + '</div>';
         hofGrid.appendChild(card);
         foundCards.push(card);
       } else {
@@ -459,7 +550,7 @@
     });
 
     if (hofGrid.children.length === 0){
-      hofGrid.innerHTML = '<p style="grid-column:1/-1; text-align:center; font-style:italic; color:var(--ink-faint);">Pas encore de trouvaille à célébrer.</p>';
+      hofGrid.innerHTML = '<p style="grid-column:1/-1; text-align:center; font-style:italic; color:var(--ink-faint);">' + t('no_finds') + '</p>';
     }
   }
 
@@ -505,10 +596,10 @@
         .then(function(results){ renderEspeces(results[0], results[1]); })
         .catch(function(err){
           console.error(err);
-          hofGrid.innerHTML = '<p style="grid-column:1/-1; text-align:center; font-style:italic; color:var(--ink-faint);">Liste indisponible pour l\'instant.</p>';
+          hofGrid.innerHTML = '<p style="grid-column:1/-1; text-align:center; font-style:italic; color:var(--ink-faint);">' + t('list_unavailable') + '</p>';
         });
     } else {
-      hofGrid.innerHTML = '<p style="grid-column:1/-1; text-align:center; font-style:italic; color:var(--ink-faint);">Lien du Sheet pas encore configuré.</p>';
+      hofGrid.innerHTML = '<p style="grid-column:1/-1; text-align:center; font-style:italic; color:var(--ink-faint);">' + t('sheet_unconfigured') + '</p>';
     }
   }
   loadEspeces();
@@ -539,17 +630,17 @@
   function loadFieldFinds(){
     const ffList = document.getElementById('fieldFindsList');
     if (INATURALIST_PROJECT.indexOf('COLLE_ICI') !== -1){
-      ffList.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">Project iNaturalist pas encore configuré.</p>';
+      ffList.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">' + t('project_unconfigured') + '</p>';
       return;
     }
-    const url = 'https://api.inaturalist.org/v1/observations?project_id=' + encodeURIComponent(INATURALIST_PROJECT) + '&per_page=200&order_by=observed_on&order=desc';
+    const url = 'https://api.inaturalist.org/v1/observations?project_id=' + encodeURIComponent(INATURALIST_PROJECT) + '&per_page=200&order_by=observed_on&order=desc&locale=' + currentLang;
     fetchAllInatPages(url)
       .then(function(results){
         const withTaxon = results.filter(o => o.taxon);
         ffList.innerHTML = '';
         renderFieldFindsStats(withTaxon);
         if (withTaxon.length === 0){
-          ffList.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">Rien à afficher pour l\'instant.</p>';
+          ffList.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">' + t('nothing_yet') + '</p>';
           return;
         }
         const rows = document.createElement('div');
@@ -568,14 +659,14 @@
               (date ? '<div class="ff-date">' + date + '</div>' : '') +
               (country ? '<div class="ff-country">' + country + '</div>' : '') +
             '</div>' +
-            '<a class="ff-link" href="' + obsUrl + '" target="_blank" rel="noopener">Voir</a>';
+            '<a class="ff-link" href="' + obsUrl + '" target="_blank" rel="noopener">' + t('see') + '</a>';
           rows.appendChild(row);
         });
         ffList.appendChild(rows);
       })
       .catch(function(err){
         console.error(err);
-        ffList.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">Indisponible pour l\'instant.</p>';
+        ffList.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">' + t('unavailable') + '</p>';
       });
   }
   loadFieldFinds();
@@ -598,8 +689,8 @@
     if (allSpeciesLoaded) return;
     allSpeciesLoaded = true;
     const container = document.getElementById('allSpeciesList');
-    container.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">Chargement…</p>';
-    const url = 'https://api.inaturalist.org/v1/observations?user_login=' + encodeURIComponent(INATURALIST_USERNAME) + '&per_page=200&order_by=observed_on&order=desc';
+    container.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">' + t('loading') + '</p>';
+    const url = 'https://api.inaturalist.org/v1/observations?user_login=' + encodeURIComponent(INATURALIST_USERNAME) + '&per_page=200&order_by=observed_on&order=desc&locale=' + currentLang;
     fetchAllInatPages(url)
       .then(function(results){
         const seen = {};
@@ -619,7 +710,7 @@
         container.innerHTML = '';
         const order = ICONIC_ORDER.filter(k => groups[k]).concat(Object.keys(groups).filter(k => !ICONIC_ORDER.includes(k)));
         if (order.length === 0){
-          container.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">Aucune espèce pour l\'instant.</p>';
+          container.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">' + t('no_species') + '</p>';
           return;
         }
         order.forEach(function(key){
@@ -630,7 +721,7 @@
           title.type = 'button';
           title.className = 'as-group-title';
           title.innerHTML =
-            '<span>' + (ICONIC_LABELS[key] || key) + ' · ' + groups[key].length + '</span>' +
+            '<span>' + iconicLabel(key) + ' · ' + groups[key].length + '</span>' +
             '<span class="as-chevron">›</span>';
 
           const body = document.createElement('div');
@@ -653,7 +744,7 @@
       })
       .catch(function(err){
         console.error(err);
-        container.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">Liste indisponible pour l\'instant.</p>';
+        container.innerHTML = '<p style="text-align:center; font-style:italic; color:var(--ink-faint);">' + t('list_unavailable') + '</p>';
       });
   }
   // charge seulement quand on ouvre l'onglet, pas au chargement de la page
@@ -681,6 +772,23 @@
   }
   updateBarilocheClock();
   setInterval(updateBarilocheClock, 30000);
+
+  // ===== Changement de langue =====
+  function setLang(lang){
+    currentLang = lang;
+    try { localStorage.setItem('lang', lang); } catch (e) {}
+    applyStaticLang();
+    loadEspeces();
+    loadFieldFinds();
+    allSpeciesLoaded = false;
+    const allPanel = document.getElementById('allspecies');
+    if (allPanel && allPanel.classList.contains('active')) loadAllSpecies();
+    else document.getElementById('allSpeciesList').innerHTML = '';
+  }
+  document.querySelectorAll('.lang-switch button').forEach(function(b){
+    b.addEventListener('click', function(){ setLang(b.dataset.lang); });
+  });
+  applyStaticLang();
 
   function setHeaderHeight(){
     const h = document.querySelector('header.top').offsetHeight;
