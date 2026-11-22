@@ -331,7 +331,6 @@
       <button data-target="especes">ViolaDex</button>
       <button data-target="fieldfinds" data-i18n="tab_finds">Trouvailles</button>
       <button data-target="portfolio">Portfolio</button>
-      <button data-target="elsewhere" data-i18n="tab_prev">Avant</button>
     </nav>
   </div>
   <div class="banner" id="banner" hidden>
@@ -368,36 +367,6 @@
   </div>
   <div class="portfolio-more">
     <a class="open-btn" href="https://adobe.ly/4yZNQLA" target="_blank" rel="noopener" data-i18n="see_all">Voir toutes les photos</a>
-  </div>
-</section>
-
-<section class="panel" id="elsewhere">
-  <div class="sub-tabs">
-    <button class="active" data-subtarget="pasttrips" data-i18n="sub_past">Voyages passés</button>
-    <button data-subtarget="favorites" data-i18n="sub_fav">Favoris</button>
-    <button data-subtarget="allspecies" data-i18n="sub_all">Toutes les espèces</button>
-  </div>
-
-  <div class="sub-panel active" id="pasttrips">
-    <div class="sub-map-wrap">
-      <iframe src="https://ninarvana.travelmap.net/beyond" allow="fullscreen" data-i18n-title="past_title" title="Voyages passés"></iframe>
-    </div>
-  </div>
-
-  <div class="sub-panel" id="favorites">
-    <div class="portfolio-frame">
-      <div class="portfolio-embed">
-        <iframe src="https://lightroom.adobe.com/embed/shares/b222dd7ea2f548e8b9bd98b199f80ce9/slideshow?background_color=%23EEE8DA&color=%236E6552" data-i18n-title="fav_title" title="Photos préférées"></iframe>
-      </div>
-      <p class="portfolio-caption" data-i18n="fav_caption">Mes photos préférées, toutes périodes confondues</p>
-    </div>
-    <div class="portfolio-more">
-      <a class="open-btn" href="https://adobe.ly/4rycTTb" target="_blank" rel="noopener" data-i18n="see_all">Voir toutes les photos</a>
-    </div>
-  </div>
-
-  <div class="sub-panel" id="allspecies">
-    <div class="allspecies-list" id="allSpeciesList"></div>
   </div>
 </section>
 
@@ -827,7 +796,6 @@
       });
   }
   // charge seulement quand on ouvre l'onglet, pas au chargement de la page
-  document.querySelector('[data-subtarget="allspecies"]').addEventListener('click', loadAllSpecies);
 
   document.querySelectorAll('nav.tabs button').forEach(function(btn){
     btn.addEventListener('click', function(){
@@ -938,10 +906,6 @@
     loadEspeces();
     loadFieldFinds();
     renderHumeurs();
-    allSpeciesLoaded = false;
-    const allPanel = document.getElementById('allspecies');
-    if (allPanel && allPanel.classList.contains('active')) loadAllSpecies();
-    else document.getElementById('allSpeciesList').innerHTML = '';
   }
   document.querySelectorAll('.lang-switch button').forEach(function(b){
     b.addEventListener('click', function(){ setLang(b.dataset.lang); });
