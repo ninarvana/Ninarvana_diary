@@ -166,7 +166,15 @@
   .espece-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .espece-photo img.sil { width: 72%; height: auto; object-fit: contain; opacity: 0.38; }
   .espece-photo svg { width: 40%; height: 40%; color: var(--ink-faint); opacity: 0.45; }
-  .espece-card.found .espece-photo { border-color: var(--clay); }
+  .espece-card { --rc: #7F8F6A; }
+  .espece-card.r1 { --rc: #7F8F6A; } .espece-card.r2 { --rc: #5E8FA3; } .espece-card.r3 { --rc: #8A5AA8; } .espece-card.r4 { --rc: #C99A2E; }
+  .espece-photo { border-color: var(--rc); border-width: 2px; }
+  .espece-card:not(.found) .espece-photo { border-style: dashed; }
+  .espece-card.found .espece-photo { border-style: solid; box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--rc); }
+  .rarity-tag { display: inline-flex; align-items: center; gap: 5px; font-size: 0.64rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-faint); margin-top: 2px; }
+  .rarity-tag::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--rc); }
+  .rarity-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 14px 0 20px; }
+  .rarity-legend .espece-card { display: inline-block; }
   .espece-name { font-style: italic; font-size: 0.84rem; color: var(--ink); }
   .espece-card:not(.found) .espece-name { color: var(--ink-faint); }
   .espece-check { font-size: 0.66rem; color: var(--clay); margin-top: 2px; letter-spacing: 0.05em; text-transform: uppercase; }
@@ -334,11 +342,10 @@
 </section>
 
 <section class="panel" id="especes">
-  <div class="hof-title">Hall of Fame<span data-i18n="hof_sub">Si jolies, mes préférées</span></div>
+  <div class="hof-title">ViolaDex<span id="dexProgress"></span></div>
+  <div class="rarity-legend" id="rarityLegend"></div>
   <div class="especes-grid" id="hofGrid"></div>
-
-  <div class="hof-title wanted-title">Wanted<span data-i18n="wanted_sub">Encore à trouver</span></div>
-  <div class="especes-grid" id="wantedGrid"></div>
+  <div id="wantedGrid" hidden></div>
 </section>
 
 <section class="panel" id="fieldfinds">
@@ -420,7 +427,7 @@
       subtitle: 'Chili · Argentine', clock: 'Heure de Nina',
       tab_map: 'Carte', tab_finds: 'Trouvailles', tab_prev: 'Avant',
       map_title: 'Carte du voyage de Nina',
-      hof_sub: 'Si jolies, mes préférées', wanted_sub: 'Encore à trouver',
+      hof_sub: 'Si jolies, mes préférées', wanted_sub: 'Encore à trouver', rar1: 'Commune', rar2: 'Peu commune', rar3: 'Rare', rar4: 'Très rare', dex_progress: 'trouvées',
       ff_intro: "Chaque trouvaille, dans l'ordre —", ff_profile: 'voir tout mon profil iNaturalist ↗',
       album_title: 'Album photo de Nina', portfolio_caption: 'Les dernières photos du voyage', see_all: 'Voir toutes les photos',
       sub_past: 'Voyages passés', sub_fav: 'Favoris', sub_all: 'Toutes les espèces',
@@ -437,7 +444,7 @@
       subtitle: 'Chile · Argentina', clock: "Nina's time",
       tab_map: 'Map', tab_finds: 'Field Finds', tab_prev: 'Previously',
       map_title: "Map of Nina's trip",
-      hof_sub: 'So pretty, my favorites', wanted_sub: 'Still missing',
+      hof_sub: 'So pretty, my favorites', wanted_sub: 'Still missing', rar1: 'Common', rar2: 'Uncommon', rar3: 'Rare', rar4: 'Very rare', dex_progress: 'found',
       ff_intro: 'Every find, in order —', ff_profile: 'see my full iNaturalist profile ↗',
       album_title: "Nina's photo album", portfolio_caption: 'The latest photos from the trip', see_all: 'See all photos',
       sub_past: 'Past Trips', sub_fav: 'Favorites', sub_all: 'All Species',
@@ -561,22 +568,38 @@
     el.innerHTML = html;
   }
 
+  function rarityOf(row){
+    const raw = String(row['Rareté'] || row['Rarete'] || row['Rarity'] || '').trim().toLowerCase();
+    if (raw){
+      if (/^[1-4]$/.test(raw)) return +raw;
+      if (/tr[eè]s|very/.test(raw)) return 4;
+      if (/peu|uncommon/.test(raw)) return 2;
+      if (/^rare/.test(raw)) return 3;
+      if (/commun|common/.test(raw)) return 1;
+    }
+    const n = parseInt(row['Observations iNat (info)'], 10);
+    if (!isNaN(n)) return n >= 100 ? 1 : n >= 40 ? 2 : n >= 10 ? 3 : 4;
+    return 1;
+  }
+
   function renderEspeces(rows, inatMap){
-    const hofGrid = document.getElementById('hofGrid');
-    const wantedGrid = document.getElementById('wantedGrid');
-    hofGrid.innerHTML = '';
-    wantedGrid.innerHTML = '';
+    const grid = document.getElementById('hofGrid');
+    grid.innerHTML = '';
     const foundCards = [];
+    let total = 0;
 
     rows.forEach(function(row){
       const name = (row['Espèce'] || row['Espece'] || '').trim();
       if (!name) return;
+      total++;
       const manualPhoto = driveIdToImg(row['Photo']);
       const inatPhoto = inatMap[normalizeName(name)] || null;
       const photoUrl = manualPhoto || inatPhoto;
+      const r = rarityOf(row);
 
       const card = document.createElement('div');
-      card.className = 'espece-card';
+      card.className = 'espece-card r' + r;
+      const tag = '<div class="rarity-tag">' + t('rar' + r) + '</div>';
 
       if (photoUrl){
         card.innerHTML =
@@ -584,27 +607,25 @@
             '<div class="flip-face front">' + GENERIC_SILHOUETTE + '</div>' +
             '<div class="flip-face back"><img src="' + photoUrl + '" loading="lazy"></div>' +
           '</div></div>' +
-          '<div class="espece-name">' + name + '</div>' +
-          '<div class="espece-check">' + t('found') + (inatPhoto && !manualPhoto ? ' · iNaturalist' : '') + '</div>';
-        hofGrid.appendChild(card);
+          '<div class="espece-name">' + name + '</div>' + tag;
         foundCards.push(card);
       } else {
-        // case grisée en attente — remplace GENERIC_SILHOUETTE par ton propre dessin quand il est prêt
         card.innerHTML =
           '<div class="espece-photo">' + GENERIC_SILHOUETTE + '</div>' +
-          '<div class="espece-name">' + name + '</div>';
-        wantedGrid.appendChild(card);
+          '<div class="espece-name">' + name + '</div>' + tag;
       }
+      grid.appendChild(card);
     });
+
+    const prog = document.getElementById('dexProgress');
+    if (prog) prog.textContent = foundCards.length + ' / ' + total + ' ' + t('dex_progress');
+    const legend = document.getElementById('rarityLegend');
+    if (legend) legend.innerHTML = [1,2,3,4].map(function(i){ return '<span class="espece-card r' + i + '"><span class="rarity-tag">' + t('rar' + i) + '</span></span>'; }).join('');
 
     // révélation en cascade, dispersée comme un calendrier de l'avent
     foundCards.forEach(function(card, i){
       setTimeout(function(){ card.classList.add('found'); }, 150 + Math.random() * i * 120);
     });
-
-    if (hofGrid.children.length === 0){
-      hofGrid.innerHTML = '<p style="grid-column:1/-1; text-align:center; font-style:italic; color:var(--ink-faint);">' + t('no_finds') + '</p>';
-    }
   }
 
   function fetchInatObservations(){
