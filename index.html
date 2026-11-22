@@ -106,6 +106,11 @@
     letter-spacing: 0.08em; text-transform: uppercase; color: #C9C0A6;
     padding: 6px 10px; cursor: pointer; border-bottom: 2px solid transparent;
   }
+  @media (max-width: 640px) {
+    header.top .right { flex-wrap: wrap; width: 100%; margin-left: 0; justify-content: space-between; gap: 8px 12px; }
+    header.top .right nav.tabs { order: 5; flex: 0 0 100%; justify-content: space-between; }
+    nav.tabs button { padding: 6px 4px; font-size: 0.64rem; letter-spacing: 0.05em; }
+  }
   nav.tabs button.active { color: #EFE9D8; border-bottom-color: var(--clay); }
 
   .panel { display: none; }
