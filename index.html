@@ -51,14 +51,14 @@
      Visible uniquement sur l'onglet Carte, tant qu'elle n'a pas été refermée. */
   .banner {
     position: relative; flex: 0 0 calc(100% + 32px); box-sizing: border-box; order: 10;
-    margin: 0 -16px -14px; padding: 0;
+    margin: 4px -16px -8px; padding: 0;
     
   }
   .banner[hidden] { display: none; }
-  .banner img { display: block; width: min(100%, 460px); height: auto; margin: 0 auto; }
+  .banner img { display: block; width: min(100%, 900px); height: auto; margin: 0 auto; }
   .banner-close {
     position: absolute; top: 6px; right: 8px; width: 28px; height: 28px; border-radius: 50%;
-    border: none; background: rgba(70,73,58,0.12); color: #46493A; cursor: pointer;
+    border: none; background: rgba(255,255,255,0.12); color: #EFE9D8; cursor: pointer;
     font-size: 1rem; line-height: 1; display: flex; align-items: center; justify-content: center; padding: 0;
   }
   .banner-close:focus-visible, header.top .logo-slot.has-img:focus-visible { outline: 2px solid var(--clay); outline-offset: 2px; }
@@ -321,7 +321,7 @@
     </nav>
   </div>
   <div class="banner" id="banner" hidden>
-    <img src="banner.webp" alt="Following the Violacrumb — illustration : Nina marche vers des violettes andines" width="1100" height="336" data-i18n-alt="banner_alt">
+    <img src="banner.webp" alt="Following the Violacrumb — illustration : Nina marche vers des violettes andines" width="1100" height="116" data-i18n-alt="banner_alt">
     <button type="button" class="banner-close" id="bannerClose" data-i18n-aria="banner_close" aria-label="Masquer l'illustration">×</button>
   </div>
 </header>
