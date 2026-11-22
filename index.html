@@ -51,8 +51,8 @@
      Visible uniquement sur l'onglet Carte, tant qu'elle n'a pas été refermée. */
   .banner {
     position: relative; flex: 0 0 calc(100% + 32px); box-sizing: border-box; order: 10;
-    margin: 0 -16px -14px; padding: 6px 0 0;
-    background: #FDFAF5; border-top: 1px solid rgba(0,0,0,0.06);
+    margin: 0 -16px -14px; padding: 0;
+    
   }
   .banner[hidden] { display: none; }
   .banner img { display: block; width: min(100%, 460px); height: auto; margin: 0 auto; }
@@ -299,7 +299,7 @@
 <header class="top">
   <div class="brand">
     <button type="button" class="logo-slot has-img" id="logoBtn" data-i18n-aria="banner_toggle" aria-label="Afficher ou masquer l'illustration">
-      <img src="logo.jpg" alt="" width="80" height="80">
+      <img src="logo.png" alt="" width="80" height="80">
     </button>
     <div class="title">Following the Violacrumbs<span data-i18n="subtitle">Chili · Argentine</span></div>
   </div>
@@ -321,7 +321,7 @@
     </nav>
   </div>
   <div class="banner" id="banner" hidden>
-    <img src="banner.jpg" alt="Following the Violacrumb — illustration : Nina marche vers des violettes andines" width="1200" height="400" data-i18n-alt="banner_alt">
+    <img src="banner.webp" alt="Following the Violacrumb — illustration : Nina marche vers des violettes andines" width="1100" height="336" data-i18n-alt="banner_alt">
     <button type="button" class="banner-close" id="bannerClose" data-i18n-aria="banner_close" aria-label="Masquer l'illustration">×</button>
   </div>
 </header>
