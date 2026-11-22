@@ -50,12 +50,12 @@
   /* Bannière illustrée — dans le bandeau fixe, donc la carte se cale dessous automatiquement.
      Visible uniquement sur l'onglet Carte, tant qu'elle n'a pas été refermée. */
   .banner {
-    position: relative; flex: 0 0 calc(100% + 32px); box-sizing: border-box; order: 10;
-    margin: 4px -16px -8px; padding: 0;
+    position: relative; flex: 0 0 100%; box-sizing: border-box; order: 10;
+    margin: 4px 0 -8px; padding: 0;
     
   }
   .banner[hidden] { display: none; }
-  .banner img { display: block; width: min(100%, 900px); height: auto; margin: 0 auto; }
+  .banner img { display: block; width: 100%; height: auto; margin: 0; }
   .banner-close {
     position: absolute; top: 6px; right: 8px; width: 28px; height: 28px; border-radius: 50%;
     border: none; background: rgba(255,255,255,0.12); color: #EFE9D8; cursor: pointer;
