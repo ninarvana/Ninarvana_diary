@@ -55,7 +55,7 @@
     
   }
   .banner[hidden] { display: none; }
-  .banner img { display: block; width: 100%; height: auto; margin: 0; }
+  .banner img { display: block; width: auto; max-width: 100%; max-height: 110px; height: auto; margin: 0 auto; }
   .banner-close {
     position: absolute; top: 6px; right: 8px; width: 28px; height: 28px; border-radius: 50%;
     border: none; background: rgba(255,255,255,0.12); color: #EFE9D8; cursor: pointer;
@@ -66,7 +66,7 @@
     header.top .brand { order: 0; }
     header.top .banner { order: 1; flex: 1 1 0; min-width: 0; margin: 0 24px; align-self: center; display: flex; align-items: center; justify-content: center; }
     header.top .banner[hidden] { display: none; }
-    header.top .banner img { width: 100%; height: auto; max-height: 96px; object-fit: contain; }
+    header.top .banner img { width: auto; max-width: 100%; height: auto; max-height: 104px; }
     header.top .banner-close { display: none; }
     header.top .right { order: 2; }
     .banner-close { top: 50%; right: 0; transform: translateY(-50%); width: 22px; height: 22px; font-size: 0.85rem; opacity: 0.7; }
@@ -344,7 +344,7 @@
     </nav>
   </div>
   <div class="banner" id="banner" hidden>
-    <img src="banner.webp" alt="Following the Violacrumb — illustration : Nina marche vers des violettes andines" width="1100" height="188" data-i18n-alt="banner_alt">
+    <img src="banner.webp" alt="Following the Violacrumb — illustration : Nina marche vers des violettes andines" width="900" height="251" data-i18n-alt="banner_alt">
     <button type="button" class="banner-close" id="bannerClose" data-i18n-aria="banner_close" aria-label="Masquer l'illustration">×</button>
   </div>
 </header>
