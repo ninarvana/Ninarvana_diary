@@ -33,6 +33,11 @@
     font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased;
   }
 
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: linear-gradient(rgba(248,240,233,0.50), rgba(248,240,233,0.78)), url('bg.webp') center / cover no-repeat;
+  }
+
   /* Bandeau compact — laisse le maximum de place à la carte */
   /* Bandeau — fixe, hauteur mesurée en JS */
   header.top {
