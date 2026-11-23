@@ -14,10 +14,10 @@
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
     --paper: #F6F3EE;
-    --paper-deep: #ECE7DF;
+    --paper-deep: #FBF1DE;
     --ink: #26303C;
     --ink-soft: #5B6674;
-    --ink-faint: #8794A2;
+    --ink-faint: #6F7B89;
     --clay: #6B4A7C;
     --glow: #FFB32B;
     --sky: #81AEE6;
@@ -84,11 +84,11 @@
   .banner-close:focus-visible, header.top .logo-slot.has-img:focus-visible { outline: 2px solid var(--clay); outline-offset: 2px; }
   header.top .title, .hof-title, .espece-name { font-family: 'Fraunces', Georgia, serif; }
   header.top .title { font-weight: 600; font-size: 0.92rem; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.3; }
-  header.top .title span { display: block; font-weight: 380; font-style: italic; font-size: 0.68rem; letter-spacing: 0; color: #EDE6F2; text-transform: none; margin-top: 2px; }
+  header.top .title span { display: block; font-weight: 380; font-style: italic; font-size: 0.68rem; letter-spacing: 0; color: #FFFFFF; text-transform: none; margin-top: 2px; }
   header.top .right { display: flex; align-items: center; gap: 16px; margin-left: auto; }
   header.top .clock {
     display: flex; align-items: center; gap: 6px;
-    font-family: 'Inter', system-ui, sans-serif; font-size: 0.7rem; color: #EDE6F2;
+    font-family: 'Inter', system-ui, sans-serif; font-size: 0.7rem; color: #FFFFFF;
   }
   header.top .clock svg { width: 13px; height: 13px; opacity: 0.7; }
   header.top .clock b { color: #FFF6EE; font-weight: 500; }
@@ -111,7 +111,7 @@
   /* ===== Sélecteur de langue ===== */
   .lang-switch { display: flex; gap: 2px; }
   .lang-switch button {
-    background: none; border: 1px solid rgba(255,255,255,0.25); color: #EDE6F2; cursor: pointer;
+    background: none; border: 1px solid rgba(255,255,255,0.25); color: #FFFFFF; cursor: pointer;
     font-family: 'Inter', system-ui, sans-serif; font-weight: 500; font-size: 0.64rem; letter-spacing: 0.08em;
     padding: 4px 7px;
   }
@@ -124,7 +124,7 @@
   nav.tabs button {
     background: none; border: none;
     font-family: 'Inter', system-ui, sans-serif; font-weight: 500; font-size: 0.68rem;
-    letter-spacing: 0.08em; text-transform: uppercase; color: #EDE6F2;
+    letter-spacing: 0.08em; text-transform: uppercase; color: #FFFFFF;
     padding: 6px 10px; cursor: pointer; border-bottom: 2px solid transparent;
   }
   @media (max-width: 640px) {
@@ -220,7 +220,7 @@
     display: flex; align-items: center; justify-content: center; margin-bottom: 8px;
   }
   .espece-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .espece-photo img.sil { width: 72%; height: auto; object-fit: contain; opacity: 0.38; }
+  .espece-photo img.sil { width: 72%; height: auto; object-fit: contain; opacity: 0.9; }
   .espece-photo svg { width: 40%; height: 40%; color: var(--ink-faint); opacity: 0.45; }
   .espece-card { --rc: #6E8F5A; }
   .espece-card.r1 { --rc: #6E8F5A; } .espece-card.r2 { --rc: #5F8FD0; } .espece-card.r3 { --rc: #8D7FA6; } .espece-card.r4 { --rc: #F2A01C; }
@@ -233,7 +233,7 @@
   .rarity-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 14px 0 20px; }
   .rarity-legend .espece-card { display: inline-block; }
   .espece-name { font-style: italic; font-size: 0.84rem; color: var(--ink); }
-  .espece-card:not(.found) .espece-name { color: var(--ink-faint); }
+  .espece-card:not(.found) .espece-name { color: #4A4358; }
   .espece-check { font-size: 0.66rem; color: var(--clay); margin-top: 2px; letter-spacing: 0.05em; text-transform: uppercase; }
 
   /* Effet calendrier de l'avent — retournement de carte au chargement */
@@ -290,10 +290,10 @@
   /* ===== Bloc statistiques — style station de données ===== */
   .stats-block {
     display: flex; gap: 22px; align-items: flex-start; flex-wrap: wrap;
-    margin-bottom: 26px; padding: 16px 18px; border: 1px solid var(--line); background: var(--paper-deep);
+    margin-bottom: 26px; padding: 16px 18px; border-radius: 18px; border: 1px solid #F1E3C8; background: rgba(255,250,240,0.95);
   }
   .stats-total { flex: 0 0 auto; text-align: center; padding-right: 20px; border-right: 1px solid var(--line); }
-  .stats-total-num { display: block; font-size: 2.1rem; font-weight: 600; color: var(--ink); line-height: 1; }
+  .stats-total-num { display: block; font-size: 2.1rem; font-weight: 600; color: #E08E0B; line-height: 1; }
   .stats-total-label {
     display: block; margin-top: 5px; font-size: 0.66rem; letter-spacing: 0.06em;
     text-transform: uppercase; color: var(--ink-faint);
@@ -301,8 +301,8 @@
   .stats-bars { flex: 1 1 200px; min-width: 180px; display: flex; flex-direction: column; gap: 6px; }
   .stats-bar-row { display: flex; align-items: center; gap: 8px; font-size: 0.74rem; }
   .stats-bar-label { flex: 0 0 76px; color: var(--ink-soft); font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .stats-bar-track { flex: 1; height: 7px; background: var(--paper); border: 1px solid var(--line); }
-  .stats-bar-fill { height: 100%; background: var(--clay); }
+  .stats-bar-track { flex: 1; height: 7px; background: #fff; border: 1px solid var(--line); border-radius: 4px; }
+  .stats-bar-fill { height: 100%; background: linear-gradient(90deg, #F2A01C, #FFB32B); border-radius: 4px; }
   .stats-bar-count { flex: 0 0 22px; text-align: right; color: var(--ink-faint); font-size: 0.7rem; }
 
   /* ===== ELSEWHERE — sous-onglets ===== */
