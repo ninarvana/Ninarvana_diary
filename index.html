@@ -140,13 +140,13 @@
   nav.tabs .ico { width: 17px; height: 17px; flex: 0 0 auto; }
   @media (max-width: 760px) { nav.tabs .ico { display: none; } }
   #accueil.panel { padding-top: var(--header-h, 72px); }
-  .hero { position: relative; background: linear-gradient(180deg, #FDF6EC 0%, #FAEEDF 100%); overflow: hidden; }
-  .hero-art { display: block; width: 100%; height: auto; }
-  .hero-text { position: relative; text-align: center; color: #5B3A6B; padding: 30px 16px 0; }
-  .hero-eyebrow { font-size: clamp(0.62rem, 1.1vw, 0.95rem); letter-spacing: 0.42em; text-transform: uppercase; font-weight: 500; color: #5A5170; }
-  .hero-title { font-family: 'Fraunces', Georgia, serif; font-weight: 420; font-size: clamp(2.6rem, 5.4vw, 4.8rem); line-height: 1; margin: 0.06em 0 0; color: #5B3A6B; }
-  .hero-rule { width: min(260px, 50%); height: 4px; border-radius: 4px; background: linear-gradient(90deg, transparent, #E9B44C, transparent); margin: 0.55em auto 0.6em; }
-  .hero-sub { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: clamp(0.85rem, 1.5vw, 1.2rem); margin: 0 0 6px; color: #4A4358; }
+  .hero { position: relative; overflow: hidden; height: clamp(300px, 44vw, 600px); background: #8EC5E2; }
+  .hero-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+  .hero-text { position: absolute; left: clamp(16px, 5vw, 80px); top: clamp(14px, 3.5vw, 52px); max-width: 70%; color: #3B2A52; text-shadow: 0 1px 14px rgba(255,255,255,0.55); }
+  .hero-eyebrow { font-size: clamp(0.62rem, 1.15vw, 1rem); letter-spacing: 0.42em; text-transform: uppercase; font-weight: 600; color: #3B2A52; }
+  .hero-title { font-family: 'Fraunces', Georgia, serif; font-weight: 420; font-size: clamp(2.4rem, 5.6vw, 5rem); line-height: 1; margin: 0.06em 0 0; color: #3B2A52; }
+  .hero-sub { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: clamp(0.85rem, 1.6vw, 1.3rem); margin: 0.5em 0 0; color: #3B2A52; }
+  @media (max-width: 700px) { .hero { height: 300px; } .hero-art { object-position: 22% 50%; } .hero-text { max-width: 92%; } }
   .home-grid > * { min-width: 0; }
   .home-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 20px; max-width: 1180px; margin: 0 auto; padding: 22px 18px 44px; }
   @media (max-width: 860px) { .home-grid { grid-template-columns: minmax(0, 1fr); } }
@@ -390,13 +390,12 @@
 
 <section class="panel active" id="accueil">
   <div class="hero">
+    <img class="hero-art" src="hero.webp" width="1376" height="768" alt="" data-i18n-alt="banner_alt">
     <div class="hero-text">
       <div class="hero-eyebrow">Following the</div>
       <h1 class="hero-title">Violacrumbs</h1>
-      <div class="hero-rule"></div>
       <p class="hero-sub" data-i18n="hero_sub">Un voyage botanique à travers les Andes</p>
     </div>
-    <img class="hero-art" src="banner.webp" width="2291" height="288" alt="" data-i18n-alt="banner_alt">
   </div>
   <div class="home-grid">
     <div class="home-map">
