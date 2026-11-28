@@ -145,6 +145,7 @@
   .hero-text { position: absolute; left: clamp(16px, 5vw, 80px); top: clamp(14px, 3.5vw, 52px); max-width: 70%; color: #2B1F4A; text-shadow: 0 0 18px rgba(255,255,255,0.85), 0 0 4px rgba(255,255,255,0.7); }
   .hero-eyebrow { font-size: clamp(0.62rem, 1.15vw, 1rem); letter-spacing: 0.42em; text-transform: uppercase; font-weight: 600; color: #2B1F4A; }
   .hero-title { font-family: 'Fraunces', Georgia, serif; font-weight: 420; font-size: clamp(2.4rem, 5.6vw, 5rem); line-height: 1; margin: 0.06em 0 0; color: #2B1F4A; }
+  .hero-title img { display:block; width: clamp(180px, 25vw, 400px); height:auto; filter: drop-shadow(0 0 10px rgba(255,255,255,0.8)) drop-shadow(0 0 2px rgba(255,255,255,0.8)); }
   .hero-sub { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: clamp(0.85rem, 1.6vw, 1.3rem); margin: 0.5em 0 0; color: #2B1F4A; }
   @media (max-width: 700px) { .hero { height: 250px; } .hero-art { object-position: 21% 50%; } .hero-text { max-width: 92%; } }
   .home-grid > * { min-width: 0; }
@@ -392,8 +393,7 @@
   <div class="hero">
     <img class="hero-art" src="hero.webp" width="2400" height="855" alt="" data-i18n-alt="banner_alt">
     <div class="hero-text">
-      <div class="hero-eyebrow">A Trail of</div>
-      <h1 class="hero-title">Viola Crumbs</h1>
+      <h1 class="hero-title"><img src="title.webp" width="1000" height="386" alt="A Trail of Viola Crumbs"></h1>
     </div>
   </div>
   <div class="home-grid">
